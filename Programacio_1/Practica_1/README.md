@@ -1,0 +1,3 @@
+Per resoldre el problema 1 he utilitzat la  constant POLZADA_CM per tal de convertir les polzades introduides a centimetres de diagonal, i a partir d'aquí he ultilitzat les variables REL_1_A,REL_1_B,REL_2_A,REL_2_B per despres multiplicar-ho per la diagonal en centimetres i poder obtenir la base i l'altura del rectangle.
+
+Per resoldre el problema 2 he utilitzat un switch per tal de poder escollir entre els 2 jocs implementats i per la resta he impleentat la estructura basica del joc.
