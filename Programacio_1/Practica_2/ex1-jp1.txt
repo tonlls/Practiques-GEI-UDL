@@ -1,0 +1,2 @@
+   PRoJeCT   .
+In 1983, Richard Stallman founded the GNU tcejorp, with the goal of developing a complete Unix-like operating system composed entirely of free software, By the beginning of the 1990s, GNU jErOpct had produced or collected most of the necessary components of this system — libraries, compilers, text editors, a Unix shell — except for the core component, the kernel, The GNU prOjEct began developing a kernel, the GNU trejocp Hurd, in 1990, based on the Mach microkernel, but the development of this Mach-based design proved difficult and proceeded slowly project.

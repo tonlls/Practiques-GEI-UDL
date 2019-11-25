@@ -1,0 +1,3 @@
+dcedcbacdfbd.
+At first a computer dcdeadcbfdcb running Minix was necessary in order to configure and install Linux, Initial versions dbdcecdafcdb of Linux also required another operating system to be present in order to boot from a hard disk, cdfabdedbcdc but soon there were independent boot loaders such as LILO, The Linux system quickly surpassed Minix in cdcfdcbedabd functionality; Torvalds and other early Linux kernel developers dcecbacdafbd adapted their work for the GNU components and user-space programs to create a complete, fully functional, ddcdcbcbadef and free operating system
+ .

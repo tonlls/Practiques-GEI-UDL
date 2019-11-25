@@ -1,0 +1,7 @@
+Linux.
+Linux (also known as GNU/Linux) is a Unix-like computer operating system, It is one of the most prominent examples of open source development and free software; its underlying source code is available for anyone to use, modify, and redistribute freely,
+
+Initially developed and used primarily by individual enthusiasts on personal computers, Linux has since gained the support of corporations such as IBM, Sun Microsystems, Hewlett-Packard, and Novell, Inc,, and has risen to prominence as an operating system for servers; eight of the ten most reliable internet hosting companies now run Linux on their web servers,[1]
+
+Linux has been more widely ported to different computing platforms than any other operating system, It is used in devices ranging from supercomputers to mobile phones, and is gaining popularity in the personal computer market Linux.
+

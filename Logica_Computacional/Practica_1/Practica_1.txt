@@ -1,0 +1,252 @@
+1-
+	1.1-
+		-Manuel: (CvP)^¬B
+		-Carles: (B->C)^(P->B)
+		-Blanca: ¬B^(M->C)
+		-Paula: (¬Cv¬M)^(¬Pv¬B)
+		
+		-CONJUNT: (CvP)^¬B^(¬BvC)^(¬PvB)^(MvCvP)^(¬MvC)^(MvC)^(¬Cv¬M)^(¬BvP)^(PvB)
+	1.2-
+		-Manuel: (CvP)^¬B
+			p cnf 3 2
+			1 3 0
+			-2 0
+		-Carles: (B->C)^(P->B) = (¬BvC)^(¬PvB)
+			p cnf 3 2
+			-1 2 0
+			-3 1 0
+		-Blanca: ¬B^(MvCvP)^(M->C) = ¬B^(¬MvC)
+			p cnf 4 2
+			-1 0
+			-3 2 0
+		-Paula: (¬Mv¬C)^(¬Pv¬B)
+			p cnf 4 2
+			-3 -2 0
+			-4 -1 0
+			
+		-CONJUNT: (CvP)^¬B^(¬BvC)^(¬PvB)^(¬MvC)^(¬Mv¬C)^(¬Pv¬B)
+			p cnf 4 7
+			2 4 0
+			-1 0
+			-1 2 0
+			-4 1 0
+			-3 2 0
+			-3 -2 0
+			-4 -1 0
+	1.3-
+		-Manuel: 
+			s SATISFIABLE
+			v 1 -2 3 0
+			s SATISFIABLE
+			v 1 -2 -3 0
+			s SATISFIABLE
+			v -1 -2 3 0
+			s SOLUTIONS 3
+		-Carles:
+			s SATISFIABLE
+			v -1 2 -3 0
+			s SATISFIABLE
+			v -1 -2 -3 0
+			s SATISFIABLE
+			v 1 2 -3 0
+			s SATISFIABLE
+			v 1 2 3 0
+			s SOLUTIONS 4
+		-Blanca:
+			s SATISFIABLE
+			v -1 2 -3 4 0
+			s SATISFIABLE
+			v -1 2 -3 -4 0
+			s SATISFIABLE
+			v -1 2 3 4 0
+			s SATISFIABLE
+			v -1 2 3 -4 0
+			s SATISFIABLE
+			v -1 -2 -3 4 0
+			s SOLUTIONS 5
+		-Paula:
+			s SATISFIABLE
+			v -1 -2 -3 -4 0
+			s SATISFIABLE
+			v -1 -2 -3 4 0
+			s SATISFIABLE
+			v -1 -2 3 -4 0
+			s SATISFIABLE
+			v -1 -2 3 4 0
+			s SATISFIABLE
+			v -1 2 -3 -4 0
+			s SATISFIABLE
+			v -1 2 -3 4 0
+			s SATISFIABLE
+			v 1 2 -3 -4 0
+			s SATISFIABLE
+			v 1 -2 -3 -4 0
+			s SATISFIABLE
+			v 1 -2 3 -4 0
+			s SOLUTIONS 9
+
+
+		-CONJUNT:
+			v -1 2 -3 -4 0
+			s SOLUTIONS 1
+
+			
+		(a) podem afirmar que en Carles menteix ja que afirma que la Blanca es culpable si ell ho es, pero unicament hi ha una solució conjunta que implica que tots son inocents excepte en Carles.
+		(b) podem afirmar que la Blanca(1) es inocent, en Carles(2) es culpable, en Manuel(3) es inocent i la Paula(4) es inocent, ja que la solucio del conjunt de totes les condicions es unicament una.
+		(c)
+		(d)
+		(e)
+2-
+	2.1- Q = Q es traidor 
+		-Cas 1: (PvQvRvS)^¬Q^(P->((RvS)^(¬Rv¬S)))^(R->((P^Q)v(P^S)v(Q^S)))
+		-Cas 2: (PvQvRvS)^Q^(¬Pv(¬R^¬S))^((¬Pv¬S)->¬R)
+		-Cas 3: (PvQvRvS)^Q^(¬P->((¬Qv¬Rv¬S)^(QvR)^(RvS)^(QvS)))^((¬Pv¬S)->¬R)
+		-Cas 4: (PvQvRvS)^¬Q^(¬Pv((RvS)^(¬Rv¬S)))^((¬Pv¬S)->¬R)
+		-Cas 5: S^(PvQvR)^(R<->P)^¬Q
+	2.2-
+		-Cas 1: ¬Q^(RvS)^(PvR)^(¬Pv¬Rv¬S)
+			p cnf 4 4
+			-2 0
+			3 4 0
+			1 3 0
+			-1 -3 -4 0
+		-Cas 2: (¬RvP)^(RvQ)^(QvR)
+			p cnf 3 3
+			-3 1 0
+			3 2 0
+			2 3 0
+		-Cas 3: (QvS)^(PvQ)^(Pv¬R)^(PvRvS)
+			p cnf 4 4
+			2 4 0
+			1 2 0
+			1 -3 0
+			1 3 4 0
+		-Cas 4: (Pv¬R)^(Pv¬Q)^(QvS)
+			p cnf 4 3
+			1 -3 0
+			1 2 0
+			2 4 0
+		-Cas 5: S^(PvQvR)^(¬RvP)^(¬PvR)^¬Q
+			p cnf 4 5
+			4 0
+			1 2 3 0
+			-3 1 0 
+			-1 3 0
+			-2 0
+	2.3-
+		-Cas 1:
+			s SATISFIABLE
+			v 1 -2 3 -4 0
+			s SATISFIABLE
+			v 1 -2 -3 4 0
+			s SATISFIABLE
+			v -1 -2 3 4 0
+			s SATISFIABLE
+			v -1 -2 3 -4 0
+			s SOLUTIONS 4
+		-Cas 2:
+			s SATISFIABLE
+			v 1 2 3 0
+			s SATISFIABLE
+			v 1 2 -3 0
+			s SATISFIABLE
+			v 1 -2 3 0
+			s SATISFIABLE
+			v -1 2 -3 0
+			s SOLUTIONS 4
+		-Cas 3:
+			s SATISFIABLE
+			v 1 2 -3 4 0
+			s SATISFIABLE
+			v 1 2 -3 -4 0
+			s SATISFIABLE
+			v 1 2 3 4 0
+			s SATISFIABLE
+			v 1 2 3 -4 0
+			s SATISFIABLE
+			v 1 -2 3 4 0
+			s SATISFIABLE
+			v 1 -2 -3 4 0
+			s SATISFIABLE
+			v -1 2 -3 4 0
+			s SOLUTIONS 7
+		-Cas 4:
+			s SATISFIABLE
+			v 1 2 -3 4 0
+			s SATISFIABLE
+			v 1 2 -3 -4 0
+			s SATISFIABLE
+			v 1 2 3 4 0
+			s SATISFIABLE
+			v 1 2 3 -4 0
+			s SATISFIABLE
+			v 1 -2 3 4 0
+			s SATISFIABLE
+			v 1 -2 -3 4 0
+			s SATISFIABLE
+			v -1 2 -3 4 0
+			s SATISFIABLE
+			v -1 2 -3 -4 0
+			s SOLUTIONS 8
+		-Cas 5:
+			s SATISFIABLE
+			v 1 -2 3 4 0
+			s SOLUTIONS 1
+
+3-
+	-CR=centre roig
+	-CB=centre blanc
+	-CN=centre negre
+		
+	-AR=arestes rojes
+	-AB=arestes blanques
+	-AN=arestes negres
+		
+	-ER=exteriors rojes
+	-EB=exteriors blanques
+	-EN=exteriors negres
+	
+	3.1-
+		-especificacions
+			-color del centre diferent al de les arestes
+			-color de les arestes diferent al de les caselles exteriors
+			-3 colors blanc negre i roig
+			*per a cada grup de tres valors binaris nomes un podra ser cert i els altres seran falsos
+		-restriccions:
+			-(CRvCBvCN)^(CR->(¬CB^¬CN))^(CB->(¬CR^¬CN))^(CN->(¬CR^¬CB)) = (CRvCBvCN)^(¬CRv¬CB)^(¬CRv¬CN)^(¬CBv¬CN)
+			-(ARvABvAN)^(AR->(¬AB^¬AN))^(AB->(¬AR^¬AN))^(AN->(¬AR^¬AB)) = (ARvABvAN)^(¬ARv¬AB)^(¬ARv¬AN)^(¬ABv¬AN)
+			-(ERvEBvEN)^(ER->(¬EB^¬EN))^(EB->(¬ER^¬EN))^(EN->(¬ER^¬EB)) = (ERvEBvEN)^(¬ERv¬EB)^(¬ERv¬EN)^(¬EBv¬EN)
+			-(CR->¬AR)^(CB->¬AB)^(CN->¬AN) = (¬CRv¬AR)^(¬CBv¬AB)^(¬CNv¬AN)
+			-(AR->¬ER)^(AB->¬EB)^(AN->¬EN) = (¬ARv¬ER)^(¬ABv¬EB)^(¬ANv¬EN)
+		-codificació:	 (CRvCBvCN)^(¬CRv¬CB)^(¬CRv¬CN)^(¬CBv¬CN)^(ARvABvAN)^(¬ARv¬AB)^(¬ARv¬AN)^(¬ABv¬AN)^(ERvEBvEN)^(¬ERv¬EB)^(¬ERv¬EN)^(¬EBv¬EN)^(¬CRv¬AR)^(¬CBv¬AB)^(¬CNv¬AN)^(¬ARv¬ER)^(¬ABv¬EB)^(¬ANv¬EN)
+	3.2-
+		c CR=1  CB=2  CN=3
+		c AR=4  AB=5  AN=6
+		c ER=7  EB=8  EN=9
+		
+		p cnf 9 18
+		
+		1 2 3 0
+		-1 -2 0
+		-1 -3 0
+		-2 -3 0
+		4 5 6 0
+		-4 -5 0
+		-4 -6 0
+		-5 -6 0
+		7 8 9 0
+		-7 -8 0
+		-7 -9 0
+		-8 -9 0
+		-1 -4 0
+		-2 -5 0
+		-3 -6 0
+		-4 -7 0
+		-5 -8 0
+		-6 -9 0
+	3.3-
+		a)12 solucions possibles, perque son 3 solucions per cada color diferent que podem posar al centre i 4 per la combinacio dels altres colors en les altres 2 posicions, per tant 3*4=12
+		b)
+			-4
+			-0, es insatisfactible perque incumpleix les restriccions imposades per l'enunciat, el centre no pot tenir el mateix color que les arestes
+			-0, es insatisfactible perque incumpleix les restriccions imposades per l'enunciat, les arestes no poden ser del mateix color que les caselles exteriors

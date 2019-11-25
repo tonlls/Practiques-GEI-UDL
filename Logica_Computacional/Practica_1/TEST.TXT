@@ -1,0 +1,5 @@
+(c) Si considerem que tots s´on innocents, quins estudiants han mentit en les seves declaracions?. Justiﬁca la teva resposta.
+(d) Si considerem que els que han resultat ser innocents (solucio´ apartat b) diuen la veritat i els que han resultat ser culpables menteixen, determineu quins s´on innocents i quins so´n culpables en aquest nou context. 
+	v -1 2 -3 -4 0
+(e) Si considerem que els que han resultat ser innocents (solucio´ apartat b) han mentit i els que han resultat ser culpables han dit la veritat, determineu quins s´on innocents i quins so´n culpables en aquest nou context.
+	v -1 2 -3 -4 0
