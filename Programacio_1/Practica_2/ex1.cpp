@@ -4,6 +4,10 @@
 #define MAX_WORDS 10
 #define MAX_CHARS 50
 #define END_TEXT_CHAR '.'
+
+/*
+converts a string to uppercase
+*/
 void str_toupper(char str[MAX_CHARS]){
 	for(int i=0;i<strlen(str);i++){
 		str[i]=toupper(str[i]);
