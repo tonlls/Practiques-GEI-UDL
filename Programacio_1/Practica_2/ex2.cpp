@@ -28,6 +28,19 @@
 #define EAST 'e'
 #define WEST 'o'
 
+////////
+void check_error(int,char[]);
+int check_labyrinth_row(char[COLUMNS+1]);
+void display_labyrinth(char[ROWS][COLUMNS+1]);
+int draw_path(char[ROWS][COLUMNS+1],char[],int,int);
+int get_directions(char[]);
+char get_display_char(char);
+int get_labyrinth(char[ROWS][COLUMNS+1]);
+int get_start_pos(int*,int*);
+int has_escaped(int,int);
+int is_wall(char);
+void walk(int*,int*,char);
+////////
 
 /*
 gets the char to display on the display_labyrinth function
@@ -84,7 +97,7 @@ returns 1 if direcctions are correct and 0 if error
 int get_directions(char directions[]){
 	printf("Input the directions you want to follow(%c North, %c South, %c East, %c West):\n",NORTH,SOUTH,EAST,WEST);
 	scanf("%s",directions);
-	for(int i=0;i<strlen(directions);i++){
+	for(int i=0;i<(int)strlen(directions);i++){
 		if(directions[i]!=NORTH&&directions[i]!=SOUTH&&directions[i]!=EAST&&directions[i]!=WEST){
 			return 0;
 		}
@@ -177,7 +190,7 @@ int draw_path(char labyrinth[ROWS][COLUMNS+1],char directions[],int x,int y){
 		return 0;
 	}
 	labyrinth[y][x]=START_POS;
-	for(int i=0;i<strlen(directions)&&!has_escaped(x,y);i++){
+	for(int i=0;i<(int)strlen(directions)&&!has_escaped(x,y);i++){
 		c=directions[i];
 		walk(&x,&y,c);
 		if(is_wall(labyrinth[y][x])){
