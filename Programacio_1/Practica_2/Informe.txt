@@ -1,0 +1,1 @@
+per tal de resoldre el primer problema, el principal i fundamental es guardar les paraules a buscar en una taula, seguidament en la mve implementació el que he realitzat ha sigut llegir paraula per paraula, i en cada paraula ordenarla amb el mateix ordre que te la paraula a buscar

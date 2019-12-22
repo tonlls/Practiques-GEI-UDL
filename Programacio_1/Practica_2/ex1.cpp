@@ -17,7 +17,7 @@ void str_toupper(char str[MAX_CHARS]){
 
 
 /*
-compares to stings by first converting them to uppercase and then comparing them
+compares to stings by first converting them to uppercase and then comparing them with strcmp from string.h
 */
 int strcompare(char str1[MAX_CHARS],char str2[MAX_CHARS]){
 	char copy1[MAX_CHARS],copy2[MAX_CHARS];
@@ -31,7 +31,7 @@ int strcompare(char str1[MAX_CHARS],char str2[MAX_CHARS]){
 
 /*
 checks if a char is a letter from a to Z
-returns 1 if it is and 0 if it isn't
+returns 1 if it is, and 0 if it isn't
 */
 int is_letter(char c){
 	if((c>='a'&&c<='z')||(c>='A'&&c<='Z')){
@@ -150,7 +150,6 @@ int main(){
 			}
 			printf("%s, ",actual_word);
 		}
-		//end=get_next_word(END_TEXT_CHAR,actual_word);
 	}while(!end);
 	printf("\n\nNum of found anagrams:\n");
 	for(int i=0;i<n_search_words;i++){
