@@ -185,16 +185,16 @@ follows the directions and sets a step on every step you do
 returns 0 if error and 1 if everithing is correct
 */
 int draw_path(char labyrinth[ROWS][COLUMNS+1],char directions[],int x,int y){
-	char c;
+	char c,wall=0;
 	if(!is_wall(labyrinth[y][x])){
 		return 0;
 	}
 	labyrinth[y][x]=START_POS;
-	for(int i=0;i<(int)strlen(directions)&&!has_escaped(x,y);i++){
+	for(int i=0;i<(int)strlen(directions)&&!has_escaped(x,y)&&!wall;i++){
 		c=directions[i];
 		walk(&x,&y,c);
 		if(is_wall(labyrinth[y][x])){
-			break;
+			wall=1;
 		}
 		else{
 			labyrinth[y][x]=STEP;
@@ -220,11 +220,11 @@ int main () {
 	char directions[COLUMNS*ROWS+1]="";
 	int x,y;
 
-	check_error(get_labyrinth(labyrinth),GET_LABYRINTH_ERR);
-	check_error(get_start_pos(&x,&y),GET_START_POS_ERR);
-	check_error(get_directions(directions),GET_DIRECTIONS_ERR);
+	check_error(get_labyrinth(labyrinth),(char*)GET_LABYRINTH_ERR);
+	check_error(get_start_pos(&x,&y),(char*)GET_START_POS_ERR);
+	check_error(get_directions(directions),(char*)GET_DIRECTIONS_ERR);
 
-	check_error(draw_path(labyrinth,directions,x,y),DRAW_PATH_ERR);
+	check_error(draw_path(labyrinth,directions,x,y),(char*)DRAW_PATH_ERR);
 	display_labyrinth(labyrinth);
 	if(has_escaped(x,y)){
 		printf("You have escaped the labyrinth!!!\n");

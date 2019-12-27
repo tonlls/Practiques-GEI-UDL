@@ -1,1 +1,66 @@
-per tal de resoldre el primer problema, el principal i fundamental es guardar les paraules a buscar en una taula, seguidament en la mve implementació el que he realitzat ha sigut llegir paraula per paraula, i en cada paraula ordenarla amb el mateix ordre que te la paraula a buscar
+Per tal de resoldre el primer problema, el principal i fundamental es guardar les paraules a buscar en una taula, seguidament en la meva implementació el que he realitzat ha estat llegir paraula per paraula, i en cada una ordenarla amb el mateix ordre que la paraula a buscar.
+
+En el segon primerament he llegit totes les entrades, despres de guardar el laberint he anat llegint una a una les direccions introduïdes per l'usuari i he anat reproduint una a una les direccions especificades fins a trobar o be la paret o be el final.
+
+
+
+////////////////exercici 1///////////////////
+
+integer find_char(character c,string str){
+	for(integer i=0;i<strcmp(str);i++){
+		return i;
+	}
+	return not_found;
+}
+
+integer is_anagram(string anagram,string str){
+	character copy[MAX_CHARS]="";
+	character temp[MAX_CHARS]="";
+	integer position;
+	if(compare_strings(anagram,str)==equal){
+		return yes;
+	}
+	copy=str;
+	if(strcmp(anagram)!=strcmp(copy)){
+		return no;
+	}
+	for(integer i=0;i<strcmp(anagram);i++){
+		position=find_char(anagram[i],copy);
+		if(pos==not_found){
+			return no;
+		}
+		temp[i]=copy[pos];
+		compact_string(copy,pos);
+	}
+	if(string_compare(temp,anagram)==equal){
+		return yes;
+	}
+	return no;
+}
+
+/////////////////////////////////////////////
+
+
+////////////////exercici 2///////////////////
+
+int draw_path(character labyrinth[ROWS][COLUMNS+1],string directions,integer x,integer y){
+	character c;
+	integer wall=0;
+	if(!is_wall(labyrinth[y][x])){
+		return non_escaped;
+	}
+	labyrinth[y][x]=START_POS;
+	for(int i=0;i<strlen(directions) and !has_escaped(x,y) and !wall;i++){
+		c=directions[i];
+		walk(&x,&y,c);
+		if(is_wall(labyrinth[y][x])){
+			wall=1;
+		}
+		else{
+			labyrinth[y][x]=STEP;
+		}
+	}
+	return escaped;
+}
+
+/////////////////////////////////////////////
