@@ -161,7 +161,7 @@ checks if user have escaped from labyrinth
 returns 1 if true and 0 if false
 */
 int has_escaped(int x,int y){
-	if(x==0||y==0||x==COLUMNS-1||y==ROWS-1){
+	if(x==0||y==0||x>=COLUMNS-1||y>=ROWS-1){
 		return 1;
 	}
 	return 0;
@@ -184,20 +184,20 @@ int is_wall(char c){
 follows the directions and sets a step on every step you do
 returns 0 if error and 1 if everithing is correct
 */
-int draw_path(char labyrinth[ROWS][COLUMNS+1],char directions[],int x,int y){
+int draw_path(char labyrinth[ROWS][COLUMNS+1],char directions[],int *x,int *y){
 	char c,wall=0;
-	if(!is_wall(labyrinth[y][x])){
+	if(is_wall(labyrinth[*y][*x])){
 		return 0;
 	}
-	labyrinth[y][x]=START_POS;
-	for(int i=0;i<(int)strlen(directions)&&!has_escaped(x,y)&&!wall;i++){
+	labyrinth[*y][*x]=START_POS;
+	for(int i=0;i<(int)strlen(directions)&&!has_escaped(*x,*y)&&!wall;i++){
 		c=directions[i];
-		walk(&x,&y,c);
-		if(is_wall(labyrinth[y][x])){
+		walk(x,y,c);
+		if(is_wall(labyrinth[*y][*x])){
 			wall=1;
 		}
 		else{
-			labyrinth[y][x]=STEP;
+			labyrinth[*y][*x]=STEP;
 		}
 	}
 	return 1;
@@ -207,29 +207,33 @@ int draw_path(char labyrinth[ROWS][COLUMNS+1],char directions[],int x,int y){
 /*
 checks if state is on ERROR_STATE and if it is prints the error message and ends the program
 */
-void check_error(int state,char error_str[]){
+int check_error(int state,char error_str[],int ex){
 	if(state==ERROR_STATE){
 		printf("%s\n\n",error_str);
-		exit(EXIT_FAILURE);
+		if(ex)exit(EXIT_FAILURE);
+		return 1;
 	}
+	return 0;
 }
 
 
 int main () {
 	char labyrinth[ROWS][COLUMNS+1];
 	char directions[COLUMNS*ROWS+1]="";
-	int x,y;
+	int x,y,end=0;
 
-	check_error(get_labyrinth(labyrinth),(char*)GET_LABYRINTH_ERR);
-	check_error(get_start_pos(&x,&y),(char*)GET_START_POS_ERR);
-	check_error(get_directions(directions),(char*)GET_DIRECTIONS_ERR);
+	end=check_error(get_labyrinth(labyrinth),(char*)GET_LABYRINTH_ERR,0);
+	end=check_error(get_start_pos(&x,&y),(char*)GET_START_POS_ERR,0);
+	end=check_error(get_directions(directions),(char*)GET_DIRECTIONS_ERR,0);
 
-	check_error(draw_path(labyrinth,directions,x,y),(char*)DRAW_PATH_ERR);
-	display_labyrinth(labyrinth);
-	if(has_escaped(x,y)){
-		printf("You have escaped the labyrinth!!!\n");
-	}
-	else{
-		printf("You are lost in the labyrinth, you will die among terrible suffering!!!\n");
+	end=check_error(draw_path(labyrinth,directions,&x,&y),(char*)DRAW_PATH_ERR,0);
+	if(!end){
+		display_labyrinth(labyrinth);
+		if(has_escaped(x,y)){
+			printf("You have escaped the labyrinth!!!\n");
+		}
+		else{
+			printf("You are lost in the labyrinth, you will die among terrible suffering!!!\n");
+		}
 	}
 }

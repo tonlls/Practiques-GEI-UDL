@@ -43,7 +43,7 @@ integer is_anagram(string anagram,string str){
 
 ////////////////exercici 2///////////////////
 
-int draw_path(character labyrinth[ROWS][COLUMNS+1],string directions,integer x,integer y){
+int draw_path(character labyrinth[ROWS][COLUMNS+1],string directions,out integer x,out integer y){
 	character c;
 	integer wall=0;
 	if(!is_wall(labyrinth[y][x])){

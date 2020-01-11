@@ -1,0 +1,118 @@
+1-
+	1-∀x (C(x)^¬AS(x))->¬A(x)
+	  ¬C(x)vAS(x)v¬A(x)
+	2-∀x (C(x)^AS(x))->(PE(x)vAD(x))
+	  ¬C(x)v¬AS(x)vPE(x)vAD(x)
+	3-∀x (¬A(x)vAD(x)vPE(x))->¬E(x)
+	  A(x)v¬E(x)^¬AD(x)v¬E(x)^¬PE(x)v¬E(x)
+	4-Ǝx C(x)
+	5-Ǝx C(x)^¬E(x)
+	
+		
+	{
+	  {¬C(x1),AS(x1),¬A(x1)},
+	  {¬C(x2),¬AS(x2),PE(x2),AD(x2)},
+	  {A(b1)},
+	  {¬AD(b1)},
+	  {¬PE(b1),¬E(b1)},
+	  {C(g1)},
+	  {¬E(x3)}
+	}
+l-
+3-
+	Un gobierno no invierte en medidas serias contra el cambio climático a menos que se haya coaligado con un partido ecologista.
+	Para ser un partido ecologista es necesario apostar por el crecimiento sostenible.
+	Todo aquel que apuesta por el crecimiento sostenible mantiene una relación difícil con el tejido industrial tradicional.
+	Los gobiernos no se coaligan con quien mantiene una relación difícil con el tejido industrial tradicional.
+	Por desgracia, no hay gobiernos que inviertan en medidas serias contra el cambio climático.
+		- G(x) : x es un gobierno;
+		- IS(x) : x invierte en medidas serias contra el cambio climático;
+		- PE(x) : x es un partido ecologista;
+		- C(x,y) : x se coaliga con y;
+		- CS(x) : x apuesta por el crecimiento sostenible;
+		- DTI(x) : x mantiene una relación difícil con el tejido industrial. 
+
+	1- ∀x,Ǝy G(x)^(¬IS(x)v(PE(y)^C(x,y)))
+	   ∀x,Ǝy G(x)^¬IS(x)vPE(y)^¬IS(x)vC(x,y)
+	   G(x)^¬IS(x)vPE(f(y))^¬IS(x)vC(x,f(y))
+	   {{G(x)},{¬IS(x),PE(f(y))},{¬IS(x),C(x,f(y))}}
+	   
+	2- ∀y PE(y) -> CS(y)
+	   ∀y ¬PE(y)vCS(y)
+	   {{¬PE(y),CS(y)}}
+	  
+	3- ∀x CS(x)->DTI(x)
+	   ¬CS(x)vDTI(x)
+	   {{¬CS(x),DTI(x)}}
+	   
+	4- ∀x,∀y G(x)->(DTI(y)->¬C(x,y))
+	   ∀x,∀y ¬G(x)v¬DTI(y)v¬C(x,y)
+	   {{¬G(x),¬DTI(y),¬C(x,y)}}
+	   
+	C- ¬Ǝx G(x)^IS(x)
+	   ∀x ¬G(x)v¬IS(x)
+	   {{¬G(x),¬IS(x)}}
+
+	-C nomes serà cert si les condicions anteriors es cumpleizen, per tant si 1^2^3^4^¬C es insatisfactible podrem afirmar per refutació que C es compleix.
+
+	--substituim les x i y per xi i yi segons cada condició i les existencials dins d'un ∀ per una funció
+
+	* 1^2^3^4^¬C => 
+	∀x1,x3,y1,y3,y2
+	{
+	  {G(x1)},                            =>C1
+	  {¬IS(x1),PE(f(y1))},                =>C2
+	  {¬IS(x1),C(x1,f(y1))},              =>C3
+	  {¬PE(y2),CS(y2)},                   =>C4
+	  {¬CS(y2),DTI(y2)},                  =>C5
+	  {¬G(x3),¬DTI(y3),¬C(x3,y3)},        =>C6
+	  {G(a)},                             =>C7
+	  {IS(a)}                             =>C8
+	}
+
+		 C7    C6
+		  \    /
+		   \  /
+	{¬DTI(y3),¬C(x3,y3)} C9    C5
+						  \    /
+						   \  /
+				   {¬C(x3,y3),¬CS(y2)} C10    C3
+										 \    /
+										  \  /
+									{¬CS(y2),¬IS(x1)} C11    C8
+								   		                \    /
+								   						 \  /
+								   					  {¬CS(y2)} C12    C4
+																  \    /
+																   \  /
+																 {¬PE(y2)} C13    C2
+																			 \    /
+																			  \  /
+																			{¬IS(x1)} C14    C8
+																						\    /
+																						 \  /
+																						  {}
+	--herbrand
+	-h0 {a,b}
+	{
+	  {G(a)},                     
+	  {¬IS(a),PE(f(b))},        
+	  {¬IS(a),C(a,f(b))},      
+	  {¬PE(b),CS(b)},           
+	  {¬CS(b),DTI(b)},          
+	  {¬G(a),¬DTI(b),¬C(a,b)},
+	  {G(a)},                     
+	  {IS(a)}                     
+	}
+
+	-h1 {a,b,f(b)}
+	{
+	  {G(a)},                     
+	  {¬IS(a),PE(f(b))},
+	  {¬IS(a),C(a,f(b))},
+	  {¬PE(f(b)),CS(f(b))},
+	  {¬CS(f(b)),DTI(f(b))},
+	  {¬G(a),¬DTI(f(b)),¬C(a,f(b))},
+	  {G(a)},    
+	  {IS(a)}
+	}
