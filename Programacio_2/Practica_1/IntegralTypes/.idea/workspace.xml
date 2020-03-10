@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="96e30dd3-ea9f-46bb-b96e-6dbac79ab4bb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../../Estructura_de_Computadors/Practica_1/Enunciat_Practica_1.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Estructura_de_Computadors/Practica_1/Practica_1.pdsprj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Estructura_de_Computadors/Practica_2/Enunciat_Practica_2.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Estructura_de_Computadors/Practica_2/Practica_2.pdsprj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Logica_Computacional/Herbrand/Herbrand.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Logica_Computacional/Herbrand/Herbrand.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="downloadDocsAutomatically" value="true" />
+        <option name="downloadSourcesAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1XhJrElBDfrOHLIzFX6v5PRJWWi" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="add_unversioned_files" value="true" />
+    <property name="last_opened_file_path" value="D:/java_libs/acm-jtf/acm-javadoc.zip!/" />
+    <property name="project.structure.last.edited" value="Global Libraries" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RunManager">
+    <configuration name="IntegralTypes" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="IntegralTypes" />
+      <module name="IntegralTypes" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.IntegralTypes" />
+        <item itemvalue="Application.IntegralTypes" />
+        <item itemvalue="Application.IntegralTypes" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="StructureViewFactory">
+    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="96e30dd3-ea9f-46bb-b96e-6dbac79ab4bb" name="Default Changelist" comment="" />
+      <created>1581492590110</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1581492590110</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Initial commit">
+      <created>1581502023249</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1581502023250</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Added main method for if the flies ;-)">
+      <created>1581505078458</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1581505078458</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Removed implementations">
+      <created>1581580146629</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1581580146629</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Renamed checkEquals to checkToString">
+      <created>1581580262544</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1581580262544</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+    <MESSAGE value="Initial commit" />
+    <MESSAGE value="Added main method for if the flies ;-)" />
+    <MESSAGE value="Removed implementations" />
+    <MESSAGE value="Renamed checkEquals to checkToString" />
+    <option name="LAST_COMMIT_MESSAGE" value="Renamed checkEquals to checkToString" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="636" y="331" width="291" height="177" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1582191548390">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="636" y="331" width="291" height="177" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1536.834@0.0.1536.834" timestamp="1582191548390" />
+    <state x="836" y="445" width="308" height="223" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1581668693286" />
+    <state x="458" y="211" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog" timestamp="1581492649924">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="458" y="211" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog/0.0.1440.900@0.0.1440.900" timestamp="1581492649924" />
+    <state x="206" y="59" key="CommitChangelistDialog2" timestamp="1581580262412">
+      <screen x="43" y="23" width="1397" height="877" />
+    </state>
+    <state x="206" y="59" key="CommitChangelistDialog2/43.23.1397.877@43.23.1397.877" timestamp="1581580262412" />
+    <state x="210" y="59" key="CommitChangelistDialog2/47.23.1393.877@47.23.1393.877" timestamp="1581505078250" />
+    <state x="496" y="133" key="DetectedRootsChooserDialog" timestamp="1582191674914">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="496" y="133" key="DetectedRootsChooserDialog/0.0.1536.834@0.0.1536.834" timestamp="1582191674914" />
+    <state x="533" y="206" width="735" height="498" key="FileChooserDialogImpl" timestamp="1582800575456">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="533" y="206" key="FileChooserDialogImpl/0.0.1536.834@0.0.1536.834" timestamp="1582800575456" />
+    <state x="631" y="189" width="735" height="498" key="FileChooserDialogImpl/70.27.1850.1053@70.27.1850.1053" timestamp="1581670445833" />
+    <state x="603" y="362" width="519" height="258" key="Github.ShareDialog" timestamp="1581502168459">
+      <screen x="47" y="23" width="1393" height="877" />
+    </state>
+    <state x="603" y="362" width="519" height="258" key="Github.ShareDialog/47.23.1393.877@47.23.1393.877" timestamp="1581502168459" />
+    <state width="1493" height="209" key="GridCell.Tab.0.bottom" timestamp="1583364306968">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1398" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1581493611650" />
+    <state width="1493" height="209" key="GridCell.Tab.0.bottom/0.0.1536.834@0.0.1536.834" timestamp="1583364306968" />
+    <state width="1351" height="230" key="GridCell.Tab.0.bottom/44.23.1396.877@44.23.1396.877" timestamp="1581580717845" />
+    <state width="1351" height="230" key="GridCell.Tab.0.bottom/47.23.1393.877@47.23.1393.877" timestamp="1581576787869" />
+    <state width="1804" height="230" key="GridCell.Tab.0.bottom/70.27.1850.1053@70.27.1850.1053" timestamp="1581939583814" />
+    <state width="1493" height="209" key="GridCell.Tab.0.center" timestamp="1583364306968">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1398" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1581493611649" />
+    <state width="1493" height="209" key="GridCell.Tab.0.center/0.0.1536.834@0.0.1536.834" timestamp="1583364306968" />
+    <state width="1351" height="230" key="GridCell.Tab.0.center/44.23.1396.877@44.23.1396.877" timestamp="1581580717845" />
+    <state width="1351" height="230" key="GridCell.Tab.0.center/47.23.1393.877@47.23.1393.877" timestamp="1581576787868" />
+    <state width="1804" height="230" key="GridCell.Tab.0.center/70.27.1850.1053@70.27.1850.1053" timestamp="1581939583813" />
+    <state width="1493" height="209" key="GridCell.Tab.0.left" timestamp="1583364306968">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1398" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1581493611648" />
+    <state width="1493" height="209" key="GridCell.Tab.0.left/0.0.1536.834@0.0.1536.834" timestamp="1583364306968" />
+    <state width="1351" height="230" key="GridCell.Tab.0.left/44.23.1396.877@44.23.1396.877" timestamp="1581580717844" />
+    <state width="1351" height="230" key="GridCell.Tab.0.left/47.23.1393.877@47.23.1393.877" timestamp="1581576787868" />
+    <state width="1804" height="230" key="GridCell.Tab.0.left/70.27.1850.1053@70.27.1850.1053" timestamp="1581939583813" />
+    <state width="1493" height="209" key="GridCell.Tab.0.right" timestamp="1583364306968">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1398" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1581493611649" />
+    <state width="1493" height="209" key="GridCell.Tab.0.right/0.0.1536.834@0.0.1536.834" timestamp="1583364306968" />
+    <state width="1351" height="230" key="GridCell.Tab.0.right/44.23.1396.877@44.23.1396.877" timestamp="1581580717845" />
+    <state width="1351" height="230" key="GridCell.Tab.0.right/47.23.1393.877@47.23.1393.877" timestamp="1581576787869" />
+    <state width="1804" height="230" key="GridCell.Tab.0.right/70.27.1850.1053@70.27.1850.1053" timestamp="1581939583813" />
+    <state x="222" y="0" width="1022" height="737" key="SettingsEditor" timestamp="1582800440776">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="208" y="31" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1581492679289" />
+    <state x="222" y="0" key="SettingsEditor/0.0.1536.834@0.0.1536.834" timestamp="1582800440776" />
+    <state x="248" y="53" key="SettingsEditor/47.23.1393.877@47.23.1393.877" timestamp="1581502143063" />
+    <state x="337" y="63" width="1022" height="737" key="SettingsEditor/70.27.1850.1053@70.27.1850.1053" timestamp="1582034714722" />
+    <state x="341" y="201" key="Vcs.Push.Dialog.v2" timestamp="1581580701431">
+      <screen x="44" y="23" width="1396" height="877" />
+    </state>
+    <state x="341" y="201" key="Vcs.Push.Dialog.v2/44.23.1396.877@44.23.1396.877" timestamp="1581580701431" />
+    <state x="343" y="201" key="Vcs.Push.Dialog.v2/47.23.1393.877@47.23.1393.877" timestamp="1581505081943" />
+    <state x="405" y="262" key="com.intellij.ide.util.TipDialog" timestamp="1582191466795">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="378" y="282" key="com.intellij.ide.util.TipDialog/0.0.1440.900@0.0.1440.900" timestamp="1581501207978" />
+    <state x="405" y="262" key="com.intellij.ide.util.TipDialog/0.0.1536.834@0.0.1536.834" timestamp="1582191466795" />
+    <state x="411" y="298" key="com.intellij.ide.util.TipDialog/43.23.1397.877@43.23.1397.877" timestamp="1581580799218" />
+    <state x="412" y="298" key="com.intellij.ide.util.TipDialog/45.23.1395.877@45.23.1395.877" timestamp="1581576018699" />
+    <state x="413" y="298" key="com.intellij.ide.util.TipDialog/47.23.1393.877@47.23.1393.877" timestamp="1581504759126" />
+    <state x="209" y="38" key="new project wizard" timestamp="1582800580027">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="209" y="38" key="new project wizard/0.0.1536.834@0.0.1536.834" timestamp="1582800580027" />
+    <state x="659" y="252" key="run.anything.popup" timestamp="1581934059638">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state x="659" y="252" key="run.anything.popup/70.27.1850.1053@70.27.1850.1053" timestamp="1581934059638" />
+    <state x="658" y="259" width="672" height="678" key="search.everywhere.popup" timestamp="1581679462067">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state x="658" y="259" width="672" height="678" key="search.everywhere.popup/70.27.1850.1053@70.27.1850.1053" timestamp="1581679462067" />
+  </component>
+</project>
