@@ -53,10 +53,20 @@ public class IntegralTypes extends CommandLineProgram {
 
     // Classifier methods
 
+    /**
+     * checks if a given integer is a 0 or a 1
+     * @param num the integer to check
+     * @return a boolean representing if the integer is a bit
+     */
     public boolean isBit(int num){
         return num==0||num==1;
     }
 
+    /**
+     * checks if all positions of the array are ones or zeros
+     * @param num the integer array to check
+     * @return a boolean representing if all integers are bits
+     */
     public boolean allBits(int[] num) {
         for(int i=0;i<num.length;i++){
             if(!isBit(num[i])){
@@ -89,9 +99,15 @@ public class IntegralTypes extends CommandLineProgram {
 
     // Creation methods from String (only takes into account correct bits)
 
+    /**
+     * copies from a given string representing a binary number with the most significant bit at the 0 position to an
+     * integer array with the most significant bit at the last position, if the string contains a non bit character it's ignored
+     * @param from the input string
+     * @param to the output integer array
+     */
     public void copy(String from, int[] to) {
-        int num,toPos=0,fromPos=from.length()-1;
-        while(fromPos>=0&&toPos<to.length){
+        int num, toPos=0, fromPos=from.length()-1;
+        while(fromPos>=0 && toPos<to.length){
             num=from.charAt(fromPos)-'0';
             if(isBit(num)){
                 to[toPos++]=num;
@@ -127,14 +143,14 @@ public class IntegralTypes extends CommandLineProgram {
     // Narrow
 
     /**
-     * shorten a bit array to the desired length
+     * shorten a bit array to the desired length only if the desired length is shorter or equal to the actual input array length and grather than or equal to 0
      * @param from bit array to be shorten
      * @param toLength desired output length
      * @return a shortened array with the values in the from array
      */
     public int[] narrow(int[] from, int toLength) {
         int[] out=new int[toLength];
-        if(toLength>=0&&toLength<=from.length) {
+        if(toLength>=0 && toLength<=from.length) {
             copy(toString(from),out);
         }
         return out;
@@ -156,15 +172,15 @@ public class IntegralTypes extends CommandLineProgram {
     // Widen
 
     /**
-     *
-     * @param from
-     * @param toLength
-     * @return
+     * extend an integer array to the desired length conserving the sign
+     * @param from input array
+     * @param toLength desired length
+     * @return extended array
      */
     public int[] widen(int[] from, int toLength) {
         int[] out=null;
-        if(toLength>=from.length&&from.length>=0){
-            if(from.length>0&&from[from.length-1]==1)
+        if(from.length>=0 && from.length<=toLength){
+            if(from.length>0 && from[from.length-1]==1)
                 out=oneOfSize(toLength);
             else
                 out=zeroOfSize(toLength);
@@ -176,10 +192,10 @@ public class IntegralTypes extends CommandLineProgram {
     // Cast
 
     /**
-     *
+     * converts a given array of integers to an array of integers with the specified length
      * @param from
      * @param toLength
-     * @return
+     * @return te result integer array
      */
     public int[] cast(int[] from, int toLength) {
         return toLength>=from.length?widen(from,toLength):narrow(from,toLength);
@@ -217,7 +233,8 @@ public class IntegralTypes extends CommandLineProgram {
     public int[] andSameLen(int[] arg1,int[] arg2){
         int[] out=new int[arg1.length];
         for(int i=0;i<out.length;i++){
-            out[i]=toInt(toBool(arg1[i])&&toBool(arg2[i]));
+            //out[i]=toInt(toBool(arg1[i])&&toBool(arg2[i]));
+            out[i]=arg1[i]&arg2[i];
         }
         return out;
     }
@@ -232,6 +249,13 @@ public class IntegralTypes extends CommandLineProgram {
         return arg1.length>INTEGER_SIZE||arg2.length>INTEGER_SIZE?LONG_SIZE:INTEGER_SIZE;
     }
     // And &
+
+    /**
+     * calculates the and operation of the given arrays
+     * @param arg1
+     * @param arg2
+     * @return result
+     */
     public int[] and(int[] arg1, int[] arg2) {
         int len=getResultLen(arg1,arg2);
         return andSameLen(cast(arg1,len),cast(arg2,len));
@@ -246,16 +270,29 @@ public class IntegralTypes extends CommandLineProgram {
     public int[] orSameLen(int[] arg1,int[] arg2){
         int[] out=new int[arg1.length];
         for(int i=0;i<out.length;i++){
-            out[i]=toInt(toBool(arg1[i])||toBool(arg2[i]));
+//            out[i]=toInt(toBool(arg1[i])||toBool(arg2[i]));
+            out[i]=arg1[i]|arg2[i];
         }
         return out;
     }
     // Or |
 
+    /**
+     * claculates the or operation of the given arrays, if they have diferent sizes the result would be adapted
+     * @param arg1 integer array as the first operator
+     * @param arg2 integer array as the second operator
+     * @return
+     */
     public int[] or(int[] arg1, int[] arg2) {
         int len=getResultLen(arg1,arg2);
         return orSameLen(cast(arg1,len),cast(arg2,len));
     }
+
+    /**
+     * gets ideal size to work
+     * @param arg input integer array
+     * @return the desired length
+     */
     public int getResultLen(int[] arg){
         return arg.length<=INTEGER_SIZE?INTEGER_SIZE:LONG_SIZE;
     }
@@ -273,11 +310,16 @@ public class IntegralTypes extends CommandLineProgram {
     }
     // Left shift <<
 
+    /**
+     * moves numPos positions left the binary number into the integer array
+     * @param num the integer array representing a binary number
+     * @param numPos positions to shift
+     * @return shifted integer array
+     */
     public int[] leftShift(int[] num, int numPos) {
         int len=getResultLen(num);
         int bitsToShift=numPos%len;
         int[] out=cast(num,len);
-
         for(int i=0;i<bitsToShift;i++){
             leftOneShift(out);
         }
@@ -299,8 +341,8 @@ public class IntegralTypes extends CommandLineProgram {
      *      |-  [1,0,0,1,1,1] -> [0,0,1,1,1,1]
      *      |-       "111001" -> "111100"
      *
-     * @param num
-     * @param negative
+     * @param num the array to work with
+     * @param negative bollean specifing if the empti positions should be filled with 1 or 0
      */
     public void rightOneShift(int[] num,boolean negative){
         for(int i=1;i<num.length;i++){
@@ -310,6 +352,12 @@ public class IntegralTypes extends CommandLineProgram {
     }
     // Unsigned right shift >>>
 
+    /**
+     * shifts the given array to the right without conserving the sign
+     * @param num the integer array representing a binary number
+     * @param numPos number of positions to shift
+     * @return original but shifted array
+     */
     public int[] unsignedRightShift(int[] num, int numPos) {
         int len=getResultLen(num);
         int bitsToShift=numPos%len;
@@ -323,6 +371,13 @@ public class IntegralTypes extends CommandLineProgram {
 
     // Signed right shift >>
 
+    /**
+     * shifts an array of integers representing a binary number numPos positions to the right taking into account the
+     * original number sign
+     * @param num the original integer array
+     * @param numPos positions to shifts
+     * @return the original array but shifted
+     */
     public int[] signedRightShift(int[] num, int numPos) {
         boolean negative=num[num.length-1]==1;
         int len=getResultLen(num);

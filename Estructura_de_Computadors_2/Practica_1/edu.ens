@@ -1,0 +1,107 @@
+ORIGEN 400h;-----------------------------------
+
+INICIO ini
+
+.DATOS	;------------------------------------
+
+	op1 VALOR 0001H,0002H,0003H,0004H,0005H
+	op2 VALOR 0005H,0004H,0003H,0002H,0001H
+	resu VALOR 5 VECES 0001H
+	
+.CODIGO
+
+ini:
+	
+	MOVL R0, 05h 
+	MOVH R0, 00h	;R0 es un comptador 
+	
+	MOVL R1, BYTEBAJO DIRECCION op1
+	MOVH R1, BYTEALTO DIRECCION op1
+	
+	MOVL R2, BYTEBAJO DIRECCION op2
+	MOVH R2, BYTEALTO DIRECCION op2
+	
+	MOVL R3, BYTEBAJO DIRECCION resu
+	MOVH R3, BYTEALTO DIRECCION resu
+	
+	MOVL R3, 05h  ;----------------------5 si hi han 5 valors per cada op i resu, sino pos els que siguin
+	MOVH R3, 00h	;R3 es un comptador 
+	
+	operacio:
+		MOV R4,[R1]
+		MOV R5,[R2]
+		
+		MOVH R6,-1	;-------------------Aixi en cas que D sigui negatiu, sino es fa normal
+		MOVL R6,-1 ;R6=D
+		
+		;R5=op2+D
+		ADD R5,R5,R6
+		
+		DEC R5
+		;R6=op1^(op2+D)
+		elevar:
+		
+			;Ja que ja no necesitem el valor de D
+			;el resultat de 'elevar' el guardarem a R6
+			;pero com que R6 val D primer l'haurem de passar a zero
+			
+			XOR R6,R6,R6
+			
+			MOV R7,[R1]
+			
+			mult_elevar:
+				
+				ADD R6,R6,R4
+				DEC R7
+			BRNZ mult_elevar
+			
+			MOV R4,R6
+			DEC R5
+		BRNZ elevar
+		JMP -1
+		;Ja que tenim el R4 lliure l'aprofitarem per ficar els valors de B i A i C
+		MOVL R4, 03h ;--------------------------------------------------------
+		MOVH R4, 00h	;R4=B
+		
+		;Fem la suma de R6=op1^(op2+D)+B
+		ADD R6,R6,R4
+		
+		MOVL R4, 03h	;------------------------------------------------------
+		MOVH R4, 00h	;R4=A
+		
+		;R5=A*(op1^(op2+D)+B) 
+		;primer ficarem R5 a zero
+		MOVL R5, 00h
+		MOVH R5, 00h
+		
+		multiplicacio:
+		
+			ADD R5,R5,R6
+			DEC R4
+		BRNZ multiplicacio
+		
+		MOVL R4, 02h	;--------------------------------
+		MOVH R4, 00h	;R4=C
+		
+		;R5=[A*(op1^(op2+D)+B)]+C
+		ADD R5,R5,R4
+		
+		MOV [R3],R5
+		
+		;Incrementem la posicio i-essima
+		INC R1 
+		INC R2
+		INC R3
+		DEC R0	;El contador es decrementa per a que acabi la funció 
+				;quan aquest arrivi a zero
+	BRNZ operacio
+JMP -1
+
+FIN
+		
+		
+		
+			
+			
+		
+		

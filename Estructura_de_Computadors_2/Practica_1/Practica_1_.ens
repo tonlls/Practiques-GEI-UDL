@@ -1,15 +1,10 @@
-; ---------------------------------------------------------------
-; Nom alumne1:Ton Llucià Senserrich
-; Grup: Grup2
-; Sessió: PR-AVA1-G1(16/03/2020) 
-;---------------------------------------------------------------
 ORIGEN 400H
 INICIO ini
 .DATOS
 	; op1 VALOR 0001H,0002H,0003H,0004H
-	op1 VALOR 0002H,0003H,0004H,0005H,0006H
-	op2 VALOR 0006H,0005H,0004H,0003H,0002H
-	resu VALOR 5 VECES 0001H
+	op1 VALOR 4 VECES 0002H
+	op2 VALOR 4 VECES 0003H
+	resu VALOR 4 VECES 0000H
 .CODIGO
 ini:
 	MOVH R0,BYTEALTO DIRECCION resu
@@ -22,34 +17,33 @@ ini:
 	MOVL R2,BYTEBAJO DIRECCION op2
 	
 	MOVH R3,00H
-	MOVL R3,05H ; utilitzem R3 com a comptador
+	MOVL R3,04H
 	
 	main:
 		MOV R4,[R1]
 		MOV R5,[R2]
-		MOVH R6,-1 
-		MOVL R6,-1 ;R6=D
+		
+		MOVH R6,00H
+		MOVL R6,01H ;R6=D
 	
 		ADD R5,R5,R6 ;Op2+D
 		
-		DEC R5
+		XOR R6,R6,R6 ;fiquem R6 a 0 per poder ficar el resultat
 		exp: ;R6= Op1^R5
-			XOR R6,R6,R6 ;fiquem R6 a 0 
-			MOV R7,[R1]
+			MOV R7,R4
 			mult_exp:;fem la multiplicaccio de l'exponencial
 				ADD R6,R6,R4
 				DEC R7
 			BRNZ mult_exp
-			MOV R4,R6 ; fiquem R6 a R4 per anar sumant R6	
 			DEC R5
 		BRNZ exp
 		
 		MOVH R4,00H
-		MOVL R4,03H ;R4=B
+		MOVL R4,09H ;R4=B
 		ADD R6,R6,R4 ;li sumem B
 		
 		MOVH R4,00H
-		MOVL R4,03H ;R4=A
+		MOVL R4,05H ;R4=A
 		XOR R5,R5,R5; a R5 hi tindrem el resultat de la multiplicacio per A
 		mult:
 			ADD R5,R5,R6
@@ -59,14 +53,15 @@ ini:
 		MOVH R6,00H
 		MOVL R6,02H ;R6=C
 		
-		SUB R5,R5,R6 ;li sumem C
+		ADD R5,R5,R6 ;li sumem C
 		MOV [R0],R5 ;ho posem a la posicio de l'array
 		
 		;incrementem les posicions i decrementem el comptador
 		INC R0
 		INC R1
 		INC R2
-		DEC R3
+		DEC R3 ;decrementem el comptador
 	BRNZ main
 JMP -1
 FIN 
+;6.527

@@ -1,0 +1,25 @@
+ORIGEN 400H
+INICIO ini
+.DATOS
+.CODIGO
+ini:
+	MOVH R0,00H
+	MOVL R0,04H
+	MOVH R1,00H
+	MOVL R1,01H
+	
+	MOV R4,R0
+	DEC R1
+	BRZ 8
+	exp: ;R2= R0^R1
+		XOR R2,R2,R2 ;fiquem R1 a 0 
+		MOV R3,R4
+		mult_exp:;fem la multiplicaccio de l'exponencial
+			ADD R2,R2,R0
+			DEC R3
+		BRNZ mult_exp
+		MOV R0,R2	
+		DEC R1
+	BRNZ exp
+JMP -1
+FIN 
