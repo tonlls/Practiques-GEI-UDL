@@ -17,61 +17,48 @@ public class Geometry {
         this.numRows=numRows;
         this.boardPadding=boardPadding;
         this.cellPadding=cellPadding;
-        //throw new UnsupportedOperationException("TODO: Step6");
     }
 
-    public int getRows() {
-        return numRows;
-        //throw new UnsupportedOperationException("TODO: Step6");
-    }
+    public int getRows() { return this.numRows; }
 
-    public int getColumns() {
-        return numCols;
-        //throw new UnsupportedOperationException("TODO: Step6");
-    }
+    public int getColumns() { return numCols; }
 
     public GDimension boardDimension() {
-        return new GDimension(windowWidth-(windowWidth*boardPadding*2),windowHeight-(windowHeight*boardPadding*2));
-        //return new GDimension(getColumns(),getRows());
-        //throw new UnsupportedOperationException("TODO: Step6");
+        return new GDimension(windowWidth - (windowWidth * boardPadding * 2),
+                windowHeight - (windowHeight * boardPadding * 2));
     }
 
     public GPoint boardTopLeft() {
-        return new GPoint(windowWidth*boardPadding,windowHeight*boardPadding);
-        //throw new UnsupportedOperationException("TODO: Step6");
+        return new GPoint(windowWidth * boardPadding,windowHeight * boardPadding);
     }
 
     public GDimension cellDimension() {
         GDimension board=boardDimension();
-        return new GDimension(board.getWidth()/getColumns(),board.getHeight()/getRows());
-        //throw new UnsupportedOperationException("TODO: Step6");
+        return new GDimension(board.getWidth() / getColumns(),board.getHeight() / getRows());
     }
 
     public GPoint cellTopLeft(int x, int y) {
         GDimension dim=cellDimension();
         GPoint start=boardTopLeft();
-        return new GPoint(start.getX()+x*dim.getWidth(),start.getY()+y*dim.getHeight());
-        //throw new UnsupportedOperationException("TODO: Step6");
+        return new GPoint(start.getX() + x * dim.getWidth(),start.getY() + y * dim.getHeight());
     }
 
     public GDimension tokenDimension() {
         GDimension dim=cellDimension();
-        return new GDimension(dim.getWidth()-(dim.getWidth()*cellPadding*2),dim.getHeight()-(dim.getHeight()*cellPadding*2));
-        //throw new UnsupportedOperationException("TODO: Step6");
+        return new GDimension(dim.getWidth() - (dim.getWidth() * cellPadding * 2),
+                dim.getHeight() - (dim.getHeight() * cellPadding * 2));
     }
 
     public GPoint tokenTopLeft(int x, int y) {
         GPoint cell=cellTopLeft(x,y);
         GDimension dim=cellDimension();
-        return new GPoint(cell.getX()+(dim.getWidth()*cellPadding),cell.getY()+(dim.getHeight()*cellPadding));
-        //throw new UnsupportedOperationException("TODO: Step6");
+        return new GPoint(cell.getX() + (dim.getWidth() * cellPadding),cell.getY() + (dim.getHeight() * cellPadding));
     }
 
     public GPoint centerAt(int x, int y) {
         GPoint pos=cellTopLeft(x,y);
         GDimension dim=cellDimension();
-        return new GPoint(pos.getX()+(dim.getWidth()/2),pos.getY()+(dim.getHeight()/2));
-        //throw new UnsupportedOperationException("TODO: Step6");
+        return new GPoint(pos.getX() + (dim.getWidth() / 2),pos.getY() + (dim.getHeight() / 2));
     }
 
     public Position xyToCell(double x, double y) {

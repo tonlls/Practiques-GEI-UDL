@@ -2,12 +2,28 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96e30dd3-ea9f-46bb-b96e-6dbac79ab4bb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../../Estructura_de_Computadors_1/Practica_2/Practica_2.pdsprj.DESKTOP-3GUF6GF.tonll.workspace" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Estructura_de_Computadors_1/Practica_2/Practica_2.pdsprj.DESKTOP-3GUF6GF.tonll.workspace" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/Practica_1.2.eje" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/Practica_1.2.eje" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/Practica_1.eje" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/Practica_1.eje" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/Practica_1.ens" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/Practica_1.ens" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/IntegralTypes/IntegralTypes.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/IntegralTypes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/IntegralTypes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../informe.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../informe.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/Practica_1_.ens" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/Practica_1_.ens" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/edu.eje" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/edu.eje" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/edu.ens" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/edu.ens" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/edu2.eje" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/edu2.eje" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/edu2.ens" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/edu2.ens" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/test.eje" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/test.eje" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/test.ens" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Estructura_de_Computadors_2/Practica_1/test.ens" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Logica_Computacional/Herbrand/Herbrand.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Logica_Computacional/Herbrand/Herbrand.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Logica_Computacional/Practica_2/3_h1.cnf" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Logica_Computacional/Practica_2/3_h1.cnf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Logica_Computacional/Practica_2/Practica_2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Logica_Computacional/Practica_2/Practica_2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Practica_2/checkers/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../Practica_2/checkers/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Practica_2/checkers/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Practica_2/checkers/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Practica_2/checkers/out/production/checkers/Game.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../Practica_2/checkers/out/production/checkers/Game.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Practica_2/checkers/out/test/checkers/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../Practica_2/checkers/out/test/checkers/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Practica_2/checkers/out/test/checkers/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Practica_2/checkers/out/test/checkers/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Practica_2/checkers/out/test/checkers/Game.class" beforeDir="false" afterPath="$PROJECT_DIR$/../../Practica_2/checkers/out/test/checkers/Game.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Practica_2/checkers/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Practica_2/checkers/src/Game.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

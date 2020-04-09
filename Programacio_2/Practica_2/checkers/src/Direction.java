@@ -11,11 +11,9 @@ public class Direction {
     private Direction(int dx, int dy) {
         this.dx=dx;
         this.dy=dy;
-        //throw new UnsupportedOperationException("TODO: Step2");
     }
 
     public Position apply(Position from) {
-        return new Position(from.getX()+this.dx,from.getY()+this.dy);
-        //throw new UnsupportedOperationException("TODO: Step2");
+        return new Position(from.getX() + this.dx,from.getY() + this.dy);
     }
 }

@@ -11,13 +11,18 @@ public class Board {
     private int numWhites;
 
     public Board(int width, int height, String board) {
-        Cell cell;
         this.width=width;
         this.height=height;
         this.cells=new Cell[height][width];
+        this.buildCells(board);
+
+    }
+
+    private void buildCells(String board) {
         int x=0,y=0;
+        Cell cell;
         for(char c:board.toCharArray()){
-            if(c=='\n'){
+            if(c == '\n'){
                 y++;
                 x=0;
             }
@@ -27,7 +32,6 @@ public class Board {
                 countCell(cell);
             }
         }
-        //throw new UnsupportedOperationException("TODO: Step4");
     }
 
     private void countCell(Cell c){
@@ -36,45 +40,38 @@ public class Board {
     }
     public int getWidth() {
         return this.width;
-        //throw new UnsupportedOperationException("TODO: Step4");
     }
 
     public int getHeight() {
         return this.height;
-        //throw new UnsupportedOperationException("TODO: Step4");
     }
 
     public int getNumBlacks() {
         return this.numBlacks;
-        //throw new UnsupportedOperationException("TODO: Step4");
     }
 
     public int getNumWhites() {
         return this.numWhites;
-        //throw new UnsupportedOperationException("TODO: Step4");
     }
+
     public boolean isOutOfBounds(Position pos){
-        return pos.getY()<0||pos.getY()>=this.getHeight()||pos.getX()<0||pos.getX()>=this.getWidth();
+        return pos.getY() < 0 || pos.getY() >= this.getHeight() || pos.getX() < 0 || pos.getX() >= this.getWidth();
     }
+
     public boolean isForbidden(Position pos) {
-        return this.isOutOfBounds(pos)||this.cells[pos.getY()][pos.getX()].isForbidden();
-        //throw new UnsupportedOperationException("TODO: Step4");
+        return this.isOutOfBounds(pos) || this.cells[pos.getY()][pos.getX()].isForbidden();
     }
 
     public boolean isBlack(Position pos) {
-        return !this.isOutOfBounds(pos)&&this.cells[pos.getY()][pos.getX()].isBlack();
-        //throw new UnsupportedOperationException("TODO: Step4");
+        return !this.isOutOfBounds(pos) && this.cells[pos.getY()][pos.getX()].isBlack();
     }
 
     public boolean isWhite(Position pos) {
-        return !this.isOutOfBounds(pos)&&this.cells[pos.getY()][pos.getX()].isWhite();
-        //throw new UnsupportedOperationException("TODO: Step4");
+        return !this.isOutOfBounds(pos) && this.cells[pos.getY()][pos.getX()].isWhite();
     }
 
     public boolean isEmpty(Position pos) {
-        return !this.isOutOfBounds(pos)&&this.cells[pos.getY()][pos.getX()].isEmpty();
-
-        //throw new UnsupportedOperationException("TODO: Step4");
+        return !this.isOutOfBounds(pos) && this.cells[pos.getY()][pos.getX()].isEmpty();
     }
 
     public void positionEdited(Position pos){
@@ -86,20 +83,17 @@ public class Board {
         positionEdited(pos);
         this.cells[pos.getY()][pos.getX()]=Cell.BLACK;
         numBlacks++;
-        //throw new UnsupportedOperationException("TODO: Step4");
     }
 
     public void setWhite(Position pos) {
         positionEdited(pos);
         this.cells[pos.getY()][pos.getX()]=Cell.WHITE;
         numWhites++;
-        //throw new UnsupportedOperationException("TODO: Step4");
     }
 
     public void setEmpty(Position pos) {
         positionEdited(pos);
         this.cells[pos.getY()][pos.getX()]=Cell.EMPTY;
-        //throw new UnsupportedOperationException("TODO: Step4");
     }
 
     // For testing and debugging
