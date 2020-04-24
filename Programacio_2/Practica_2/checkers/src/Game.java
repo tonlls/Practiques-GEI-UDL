@@ -28,7 +28,7 @@ public class Game {
         for(int y=0;y<board.getHeight();y++){
             for(int x=0;x<board.getWidth();x++){
                 pos=new Position(x,y);
-                if(board.isWhite(pos)&&isValidFrom(pos))return false;
+                if(board.isWhite(pos)&&canMove(pos))return false;
             }
         }
         return true;
@@ -40,34 +40,36 @@ public class Game {
         for(int x=0;x < board.getWidth();x++){
             if(board.isWhite(new Position(x,y)))return true;
         }
-        //return blackHasNoMoves();
-        return false;
+
+        return blackHasNoMoves();
+        //return false;
     }
     public boolean blackHasNoMoves(){
         Position pos;
         for(int y=0;y<board.getHeight();y++){
             for(int x=0;x<board.getWidth();x++){
                 pos=new Position(x,y);
-                if(board.isBlack(pos)&&isValidFrom(pos))return false;
+                if(board.isBlack(pos)&&canMove(pos))return false;
             }
         }
         return true;
     }
-    public boolean blackHasWon(){
+    private boolean blackHasWon(){
         int y=board.getHeight() - 1;
         if(board.getNumWhites() == 0)return true;
         for(int x=0;x < board.getWidth();x++){
             if(board.isBlack(new Position(x,y)))return true;
         }
-        //return !whiteHasNoMoves();
-        return false;
+        return whiteHasNoMoves();
+        //return false;
     }
 
     public boolean hasWon() {
-        return getCurrentPlayer() == Player.WHITE ? whiteHasWon() : blackHasWon();
+        return this.hasWon;
     }
 
     //tocheck
+
     public boolean isValidFromOcupatedPos(Position position){
         List<Position> positions=new ArrayList<Position>();
         for(Direction d : board.isBlack(position) ? BLACK_DIRECTIONS : WHITE_DIRECTIONS){
@@ -82,22 +84,66 @@ public class Game {
             return isValidFromOcupatedPos(position);
         return false;
     }
+    private boolean canMove(Position pos){
+            if(board.isWhite(pos)){
+                return board.isEmpty(WHITE_DIRECTIONS[0].apply(pos))
+                || board.isEmpty(WHITE_DIRECTIONS[1].apply(pos))
+                || (board.isBlack(WHITE_DIRECTIONS[0].apply(pos)) && board.isEmpty(WHITE_DIRECTIONS[0].apply(WHITE_DIRECTIONS[0].apply(pos))))
+                || (board.isBlack(WHITE_DIRECTIONS[1].apply(pos)) && board.isEmpty(WHITE_DIRECTIONS[1].apply(WHITE_DIRECTIONS[1].apply(pos))));
+            }else if(board.isBlack(pos)){
+                return board.isEmpty(BLACK_DIRECTIONS[0].apply(pos))
+                || board.isEmpty(BLACK_DIRECTIONS[1].apply(pos))
+                || (board.isWhite(BLACK_DIRECTIONS[0].apply(pos)) && board.isEmpty(BLACK_DIRECTIONS[0].apply(BLACK_DIRECTIONS[0].apply(pos))))
+                || (board.isWhite(BLACK_DIRECTIONS[1].apply(pos)) && board.isEmpty(BLACK_DIRECTIONS[1].apply(BLACK_DIRECTIONS[1].apply(pos))));
+            }
+            return false;
+    }
+    /*
+    public boolean isValidFrom(Position position){
+        return false;
+    }*/
+    /*private boolean canMoveTo(Position from,Position to){
+        if(board.isWhite(from))
+            return Position.middle(from,to)!=null?
+    }
+    public boolean canMove(Position pos){
+        List<Position> positions=new ArrayList<>();
+        for(Direction d : board.isBlack(pos) ? BLACK_DIRECTIONS : WHITE_DIRECTIONS){
+            positions.add(d.apply(pos));
+            positions.add(d.apply(positions.get(positions.size() - 1)));
+        }
+        for(Position p:positions){
+
+        }
+    }*/
 
     public boolean isValidToArray(Position start, List<Position> end){
         for(Position pos : end){
-            if(isValidTo(start,pos))return true;
+            if(isValidTo(start,pos))
+                return true;
         }
         return false;
     }
 
     // Assumes validFrom is a valid starting position
-    public boolean isValidTo(Position validFrom, Position to) {
+    public boolean isValidTo(Position validFrom,Position to){
+        boolean isWhite=getCurrentPlayer()==Player.WHITE;
+        //boolean isWhite=board.isWhite(validFrom);
+        Position mid=Position.middle(validFrom,to);
+        int dist=Position.distance(validFrom,to);
+        if(!this.board.isEmpty(to) || !validFrom.sameDiagonalAs(to) || !( isWhite ?
+                to.getY() < validFrom.getY() : to.getY() > validFrom.getY())) return false;
+        return dist == 2 || (dist == 4 && (isWhite ? this.board.isBlack(mid) : this.board.isWhite(mid)));
+    }
+    /*public boolean isValidTo(Position validFrom, Position to) {
         Position mid=Position.middle(validFrom,to);
         int dist=Position.distance(validFrom,to);
         if(!this.board.isEmpty(to) || !validFrom.sameDiagonalAs(to) || !(getCurrentPlayer() == Player.WHITE ?
                 to.getY() < validFrom.getY() : to.getY() > validFrom.getY())) return false;
-        return dist == 2 || (dist == 4 && (this.getCurrentPlayer() == Player.WHITE ? this.board.isBlack(mid) : this.board.isWhite(mid)));
-    }
+        return dist == 2 || (dist == 4 && (this.getCurrentPlayer() == Player.WHITE ?
+            this.board.isBlack(mid) : this.board.isWhite(mid)));
+    }*/
+
 
     // Assumes both positions are valid
     public Move move(Position validFrom, Position validTo) {
@@ -111,8 +157,10 @@ public class Game {
         else
             board.setBlack(validTo);
         board.setEmpty(validFrom);
-        if(!hasWon())
+        this.hasWon=getCurrentPlayer() == Player.WHITE ? whiteHasWon() : blackHasWon();
+        if(!hasWon()) {
             currentPlayer=getCurrentPlayer()==Player.WHITE?Player.BLACK:Player.WHITE;
+        }
         return new Move(validFrom,mid,validTo);
     }
 
