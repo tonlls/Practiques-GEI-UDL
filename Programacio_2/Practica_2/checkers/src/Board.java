@@ -74,7 +74,7 @@ public class Board {
         return !this.isOutOfBounds(pos) && this.cells[pos.getY()][pos.getX()].isEmpty();
     }
 
-    public void positionEdited(Position pos){
+    private void positionEdited(Position pos){
         if(isWhite(pos))numWhites--;
         else if(isBlack(pos))numBlacks--;
     }

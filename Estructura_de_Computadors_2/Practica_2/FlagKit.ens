@@ -1,0 +1,49 @@
+; ---------------------------------------------------------------
+; Nom alumne1:Ton Llucià Senserrich
+; Grup: Grup2
+;---------------------------------------------------------------
+PANTALLA EQU 0B000H
+ORIGEN 400H
+INICIO ini
+.DATOS
+	;VERMELL -> 2000H
+	;GROC -> 1800H
+	row_data VALOR 2000H,2000H, 1800H,1800H, 2000H,2000H, 1800H,1800H, 2000H,2000H, 1800H,1800H, 2000H,2000H,3000H
+.CODIGO
+ini:
+	;fiquem el punter de la pantalla a R0
+	MOVH R0,BYTEALTO PANTALLA
+	MOVL R0,BYTEBAJO PANTALLA
+	MOVH 
+	;ens movem fora de la pantalla
+	MOVH R2, 00h
+	MOVL R2, 120
+	ADD R2,R0,R2
+	
+	;netejar pantalla
+	MOVH R3, 00H
+	MOVL R3, 03H
+	MOV [R2],R3
+	;posem el contador de les files pel bucle
+	MOVH R2,00H
+	MOVL R2,8
+	
+	
+	row:
+		;posem el commptador de les columnes
+		MOVH R4,00H
+		MOVL R4,15
+		;posem a R2 les dades de una fila
+		MOVH R3,BYTEALTO DIRECCION row_data
+		MOVL R3,BYTEBAJO DIRECCION row_data
+		;en aquest bucle printem cada una de les columnes dins de cada fila
+		col:
+			MOV R5,[R2]
+			MOV [R0],R5
+			INC R0
+			INC R3
+			DEC R4
+		BRNZ col
+		DEC R2
+	BRNZ row
+FIN

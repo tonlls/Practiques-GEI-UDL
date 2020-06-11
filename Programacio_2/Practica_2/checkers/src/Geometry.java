@@ -19,7 +19,7 @@ public class Geometry {
         this.cellPadding=cellPadding;
     }
 
-    public int getRows() { return this.numRows; }
+    public int getRows() { return numRows; }
 
     public int getColumns() { return numCols; }
 

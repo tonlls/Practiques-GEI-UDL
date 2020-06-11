@@ -1,0 +1,177 @@
+; ---------------------------------------------------------------
+; Nom alumne 1:Ton Llucià Senserrich
+; Grup: Grup2
+; Sessió: PR-AVA2d
+; ---------------------------------------------------------------
+TECLADO EQU 0A000H
+PANTALLA EQU 0B000H
+ORIGEN 400H
+INICIO ini
+.DATOS
+	BLACK VALOR 0700h
+	GRAY VALOR 3000h
+	GREEN VALOR 1000h
+	RED VALOR 2000h
+	codi VALOR 0743h,074Fh,0744h,0749h,3800h,3800h,3800h,3800h
+	open VALOR 104Fh,1050h,1045h,104Eh
+	closed VALOR 2043h,204Ch,204Fh,2053h,2045h,2044h
+	screen VALOR 0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0
+	;posem el codi secret aixi(amb el color adient) perque aixi despres podem comparar directament amb la pantalla
+	secret_code VALOR 3963h,396Fh,3976h,3969h ;secret_code=covi
+	
+.CODIGO
+ini:
+	;inicialitzem pantalla i registres necessaris per pintarla
+	MOVH R0,BYTEALTO PANTALLA
+	MOVL R0,BYTEBAJO PANTALLA
+	MOVH R3,BYTEALTO DIRECCION BLACK
+	MOVL R3,BYTEBAJO DIRECCION BLACK
+	MOVH R4,BYTEALTO DIRECCION GRAY
+	MOVL R4,BYTEBAJO DIRECCION GRAY
+	MOVH R5,BYTEALTO DIRECCION screen
+	MOVL R5,BYTEBAJO DIRECCION screen
+	
+	MOVH R2, 00h
+	MOVL R2, 120
+	ADD R1,R0,R2
+	
+	;netejar pantalla
+	MOVH R2, 00H
+	MOVL R2, 03H
+	MOV [R1],R2
+	MOV R1,R0
+	MOVH R2,00H
+	MOVL R2,120
+	;pintem la pantalla de gris i amb els dibuixos pertinents
+	print_screen:
+		MOV R6,[R5]
+		INC R6
+		DEC R6
+		BRNZ one
+		MOV R6,[R4]
+		JMP draw
+		one:
+		MOV R6,[R3]
+		draw:
+		MOV [R1],R6
+		INC R1
+		INC R5
+		DEC R2
+	BRNZ print_screen
+	MOVH R2,00h
+	MOVL R2,52
+	;fiquem a R1 la posició de la pantalla necessaria
+	ADD R1,R0,R2
+	MOVH R3,BYTEALTO DIRECCION codi
+	MOVL R3,BYTEBAJO DIRECCION codi
+	MOVH R5,00h
+	MOVL R5,8
+	;escribim l'string de codi i els espais en blanc
+	print_codi:
+		MOV R4,[R3]
+		MOV [R1],R4
+		INC R1
+		INC R3
+		DEC R5
+	BRNZ print_codi
+	MOVH R2,00H
+	MOVL R2,4
+	SUB R1,R1,R2
+	MOVH R2,BYTEALTO TECLADO
+	MOVL R2,BYTEBAJO TECLADO
+	;netejem el buffer de teclat
+	MOV R3,R2
+	INC R3
+	MOVH R4,00h
+	MOVL R4,00000100b
+	MOVL R5,00h
+	MOVH R5,01h
+	MOV [R3],R4
+	MOVH R4,00h
+	MOVL R4,5
+	MOVL R7,00h
+	read_codi:
+		MOVH R6,00h
+		;fem un bucle fins que l'usuari premi una tecla
+		read_keys:
+			MOV R6,[R3]
+			MOVL R6,00H
+			COMP R6,R5
+		BRNZ read_keys
+		;mirem si es 1 per saber si es l'ultim, el que no s'ha de printar, i si es l'ultim sortim del bucle
+		MOVH R6,00h
+		MOVL R6,1
+		COMP R4,R6
+		BRZ check
+		;si no es la ultima lletra la printem
+		MOV R7,[R2]
+		MOVH R7,39h
+		MOV [R1],R7
+		INC R1
+		DEC R4
+	BRNZ read_codi
+	;mirem si el codi introduït es correcte
+	check:
+		MOVH R4,00h
+		MOVL R4,4
+		SUB R1,R1,R4
+		MOVH R4,BYTEALTO DIRECCION secret_code
+		MOVL R4,BYTEBAJO DIRECCION secret_code
+		MOVH R5,00h
+		MOVL R5,4
+		;fem un bucle per comprovar si el codi es correcte
+		check_codi:
+			MOV R6,[R4]
+			MOV R7,[R1]
+			;si no son iguals els caracters anem a print_err
+			COMP R6,R7
+			BRNZ print_err
+			INC R4
+			INC R1
+			DEC R5
+		BRNZ check_codi
+	;si el codi es correcte acabarà el bucle i fara el print_ok,
+	;on inicialitzem els registres necessaris per tal de pritar el open i color verd
+	print_ok:
+		MOVH R3,BYTEALTO DIRECCION GREEN
+		MOVL R3,BYTEBAJO DIRECCION GREEN
+		MOVH R4,00h
+		MOVL R4,4
+		MOVH R5,BYTEALTO DIRECCION open
+		MOVL R5,BYTEBAJO DIRECCION open
+		JMP response
+	;si el codi esta malament saltem aqui
+	;inicialitzem els registres necessaris per printar el closed i color vermell
+	print_err:
+		MOVH R3,BYTEALTO DIRECCION RED
+		MOVL R3,BYTEBAJO DIRECCION RED
+		MOVH R4,00h
+		MOVL R4,6
+		MOVH R5,BYTEALTO DIRECCION closed
+		MOVL R5,BYTEBAJO DIRECCION closed
+		JMP response
+	;printem el open o el closed i el color necessari
+	response:
+		MOVH R6,00h
+		MOVL R6,99
+		ADD R1,R0,R6
+		
+		;printem el open o el closed
+		print_response:
+			MOV R6,[R5]
+			MOV [R1],R6
+			INC R5
+			INC R1
+			DEC R4
+		BRNZ print_response
+		;printem el color corresponent de dins la caixa
+		print_color:
+			MOVH R5,00h
+			MOVL R5,48
+			ADD R1,R0,R5
+			MOV R6,[R3]
+			MOV [R1],R6
+			MOVL R5,15
+			ADD R1,R1,R5
+			MOV [R1],R6
+FIN

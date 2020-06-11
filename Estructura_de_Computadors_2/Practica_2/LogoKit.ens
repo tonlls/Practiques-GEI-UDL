@@ -1,0 +1,139 @@
+; ---------------------------------------------------------------
+; Nom alumne 1:Ton Llucià Senserrich
+; Grup: Grup2
+; Sessió: PR-AVA2c
+; ---------------------------------------------------------------
+TECLADO EQU 0A000H
+PANTALLA EQU 0B000H
+ORIGEN 400H
+INICIO ini
+.DATOS
+	;negre -> 000001110100100100111100 - 7493C
+	;gris -> 3000H
+	BLACK VALOR 074Fh
+	GRAY VALOR 3000H
+	dataEps VALOR 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,1,1,0,0,1,1,1,0,0,1,0,0,0,0,1,0,1,0,0,1,0,0,0,0,1,1,1,0,0,1,1,1,0,0,1,1,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0,1,1,1,0,0,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+	dataUdl VALOR 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0,1,0,0,0,0,1,0,1,0,0,1,1,1,0,0,1,0,0,0,0,1,0,1,0,0,1,0,1,0,0,1,0,0,0,0,1,0,1,0,0,1,0,1,0,0,1,0,0,0,0,1,1,1,0,0,1,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+	logotip VALOR 074Ch,074Fh,0747h,074Fh,0754h,0749h,0750h,3800h
+	error VALOR 2743h,274fh,2744h,2749h,2720h,2745h,2752h,2752h,274Fh,274Eh,2749h
+.CODIGO
+ini:
+	;inicialitzem pantalla
+	MOVH R0,BYTEALTO PANTALLA
+	MOVL R0,BYTEBAJO PANTALLA
+	MOV R1,R0
+	MOVH R2,00H
+	MOVL R2,120
+	MOVH R3,30h
+	MOVL R3,00h
+	;pintem tota la pantalla de gris
+	paint_screen:
+		MOV [R1],R3
+		INC R1
+		DEC R2
+	BRNZ paint_screen
+	;inicialitzem la string de logotip per pintar la pantalla d'inici
+	MOVH R2,BYTEALTO DIRECCION logotip
+	MOVL R2,BYTEBAJO DIRECCION logotip
+	MOVH R1,00h
+	MOVL R1,17
+	ADD R1,R0,R1
+	MOVH R3,00H
+	MOVL R3,8
+	;pintem la pantalla d'inici
+	draw_logotip:
+		MOV R4,[R2]
+		MOV [R1],R4
+		INC R1
+		INC R2
+		DEC R3
+	BRNZ draw_logotip
+	;inicialitzem el teclat
+	MOVH R2,BYTEALTO TECLADO
+	MOVL R2,BYTEBAJO TECLADO
+	;netejem el buffer
+	MOV R3,R2
+	INC R3
+	MOVH R4,00h
+	MOVL R4,00000100b
+	MOVL R5,00H
+	MOVH R5,01H
+	MOV [R3],R4
+	;fem un bucle fins que l'usuari premi una tecla
+	no_tecla:
+		MOV R6, [R3]; si haguessim teclejat una 'A'  [R1]= 01h 41h -> R5=0141
+		MOVL R6,00H; R5=0100H
+		COMP R6,R5
+	BRNZ no_tecla
+	
+	MOV R4,[R2]
+	DEC R1
+	MOVH R4,38h
+	;mirem si la lletra es una 'u','U','e' o 'E'
+	MOVH R5,38h
+	MOVL R5,55h;R5=U
+	;escribim la lletra a pantalla
+	MOV [R1],R4
+	COMP R4,R5
+	BRZ udl
+	MOVL R5,75h;R5=u
+	COMP R4,R5
+	BRZ udl
+	
+	MOVL R5,45h;R5=E
+	COMP R4,R5
+	BRZ eps
+	MOVL R5,65h;R5=e
+	COMP R4,R5
+	BRZ eps
+	codi_erroni:
+		MOVH R2,00h
+		MOVL R2,44h
+		ADD R1,R2,R1
+		MOVH R2,BYTEALTO DIRECCION error
+		MOVL R2,BYTEBAJO DIRECCION error
+		MOVH R3,00h
+		MOVL R3,11
+		draw_error:
+			MOV R4,[R2]
+			MOV [R1],R4
+			INC R2
+			INC R1
+			DEC R3
+		BRNZ draw_error
+	JMP -1
+	eps:
+		MOVH R4,BYTEALTO DIRECCION dataEps
+		MOVL R4,BYTEBAJO DIRECCION dataEps
+	JMP logo
+	udl:
+		MOVH R4,BYTEALTO DIRECCION dataUdl
+		MOVL R4,BYTEBAJO DIRECCION dataUdl
+	logo:
+	;R2->data
+	MOVH R0,BYTEALTO PANTALLA
+	MOVL R0,BYTEBAJO PANTALLA
+	;posem a R1 el contador
+	MOVH R1,00H
+	MOVL R1,120
+	MOVH R5,BYTEALTO DIRECCION BLACK
+	MOVL R5,BYTEBAJO DIRECCION BLACK
+	MOVH R6,BYTEALTO DIRECCION GRAY
+	MOVL R6,BYTEBAJO DIRECCION GRAY
+	;pintem el logo
+	main:
+		MOV R7,[R4]
+		INC R7
+		DEC R7
+		BRNZ one
+		MOV R7,[R6]
+		JMP draw
+		one:
+		MOV R7,[R5]
+		draw:
+		MOV [R0],R7
+		INC R0
+		INC R4
+		DEC R1
+	BRNZ main
+FIN

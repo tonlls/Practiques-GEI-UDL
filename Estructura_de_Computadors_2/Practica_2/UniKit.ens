@@ -1,0 +1,51 @@
+; ---------------------------------------------------------------
+; Nom alumne1:Ton Llucià Senserrich
+; Grup: Grup2
+;---------------------------------------------------------------
+PANTALLA EQU 0B000H
+ORIGEN 400H
+INICIO ini
+.DATOS
+	BLACK VALOR 074Fh
+	GRAY VALOR 3000H
+	data VALOR 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,1,1,0,0,1,1,1,0,0,1,0,0,0,0,1,0,1,0,0,1,0,0,0,0,1,1,1,0,0,1,1,1,0,0,1,1,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0,1,1,1,0,0,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+.CODIGO
+ini:
+	;fiquem el punter de la pantalla a R0
+	MOVH R0,BYTEALTO PANTALLA
+	MOVL R0,BYTEBAJO PANTALLA
+	;sortim dels marges de la pantalla
+	MOVH R1, 00h
+	MOVL R1, 120
+	ADD R1,R0,R1
+	;netejem la pantalla
+	MOVH R2, 00H
+	MOVL R2, 03H
+	MOV [R1],R2
+	;posem a R1 el comptador dels pixels de la pantalla
+	MOVH R1,00H
+	MOVL R1,120
+	;posem les dades necessaries a R2,R3,R4
+	MOVH R2,BYTEALTO DIRECCION data
+	MOVL R2,BYTEBAJO DIRECCION data
+	MOVH R3,BYTEALTO DIRECCION BLACK
+	MOVL R3,BYTEBAJO DIRECCION BLACK
+	MOVH R4,BYTEALTO DIRECCION GRAY
+	MOVL R4,BYTEBAJO DIRECCION GRAY
+	;fem un bucle per cada valor del nostre array de dades i pixel de la pantalla i wsi el valor de l'array es 1 pintem un pixel BLACK i si es 0 pintem un pxel GRAY
+	main:
+		MOV R5,[R2]
+		INC R5
+		DEC R5
+		BRNZ one
+		MOV R6,[R4]
+		JMP draw
+		one:
+		MOV R6,[R3]
+		draw:
+		MOV [R0],R6
+		INC R0
+		INC R2
+		DEC R1
+	BRNZ main
+FIN
