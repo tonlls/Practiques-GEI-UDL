@@ -6,10 +6,18 @@ import utils.PackUtils;
 public class Member {
     
     private static final int MAX_BOOKS = 3;
-    
+    /**
+     * the limit size the name field can have
+     */
     public static final int NAME_LIMIT = 20;
+    /**
+     * the limit size the address field can have
+     */
     public static final int ADDRESS_LIMIT = 30;
-    public static final int SIZE = 8+2*NAME_LIMIT+2*ADDRESS_LIMIT+8*MAX_BOOKS; // step 2
+    /**
+     * the size the whole Member object will fit in the file
+     */
+    public static final int SIZE = 8+(NAME_LIMIT*2)+(ADDRESS_LIMIT*2)+(MAX_BOOKS*8);
     
     private final long id;
     private final String name;
@@ -20,7 +28,7 @@ public class Member {
      * Member class constructor, initialize all the needed variables
      * @param id the Member id
      * @param name the Member name
-     * @param address the Member a
+     * @param address the Member address
      */
     public Member(long id, String name, String address) {
         this.id=id;
@@ -34,25 +42,19 @@ public class Member {
         this.name=name;
         this.address=address;
         this.idBooks=idBooks;
-        //throw new UnsupportedOperationException("step 2");
     }
 
     /**
      * gets the id from a Member object
      * @return a long containing the id
      */
-    public long getId() {
-        return this.id;
-    }
+    public long getId() { return this.id; }
 
     /**
      * gets the name from a Member object
      * @return a string containing the name
      */
-    public String getName() {
-        return this.name;
-        //throw new UnsupportedOperationException("step 2");
-    }
+    public String getName() { return this.name; }
 
     /**
      * gets the adress from a Member object
@@ -101,7 +103,7 @@ public class Member {
 
     /**
      * removes a book from the file
-     * @param idBook
+     * @param idBook the Book id we want to remove
      */
     public void removeBook(long idBook) {
         for(int i=0;i<MAX_BOOKS;i++){
@@ -155,7 +157,7 @@ public class Member {
         PackUtils.packLimitedString(name, NAME_LIMIT, record, offset);
         offset += 2 * NAME_LIMIT;
         PackUtils.packLimitedString(address, ADDRESS_LIMIT, record, offset);
-        offset+= 2*ADDRESS_LIMIT;
+        offset+= 2 * ADDRESS_LIMIT;
         for(int i=0;i<MAX_BOOKS;i++){
             PackUtils.packLong(idBooks[i], record, offset);
             offset+=8;

@@ -20,7 +20,7 @@ public class BooksFile {
 
     /**
      * clears a BookFile by setting it's length to 0
-     * @throws IOException
+     * @throws IOException in case of any error clearing the file
      */
     public void clear() throws IOException {
         this.raf.setLength(0);
@@ -59,7 +59,7 @@ public class BooksFile {
     }
 
     /**
-     * closes the file
+     * closes the books file
      * @throws IOException in case of any file error
      */
     public void close() throws IOException {

@@ -9,10 +9,9 @@ import files.LogFile;
 import files.MembersFile;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.rmi.server.ExportException;
+import java.io.RandomAccessFile;
 import java.util.StringTokenizer;
 
 public class LibraryManager extends CommandLineProgram {
@@ -33,15 +32,13 @@ public class LibraryManager extends CommandLineProgram {
     // Entry points
 
     /**
-     *
-     * @param args
+     * starts the program by actually calling to the run function
+     * @param args the arguments the program will need to be executed, actually the command line arguments
      */
-    public static void main(String[] args) {
-        new LibraryManager().start(args);
-    }
+    public static void main(String[] args) { new LibraryManager().start(args); }
 
     /**
-     *
+     * the main function in our program, it will execute all the needed functions to run our program
      */
     public void run() {
         try {
@@ -70,6 +67,7 @@ public class LibraryManager extends CommandLineProgram {
         this.movements.close();
     }
 
+    // Movements processing
     private void checkMemberId(long id) throws Exception {
         if(id<0||id>(int)membersFile.length()){
             throw new Exception("el codi de membre:'"+id+"' no es valid");
@@ -160,9 +158,7 @@ public class LibraryManager extends CommandLineProgram {
         }
     }
 
-    // Movements processing
     private void processMovements() throws IOException {
-
         StringTokenizer args;
         String line=this.movements.readLine();
         while(line!=null){

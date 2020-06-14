@@ -1,7 +1,6 @@
 
 package files;
 
-import domain.Book;
 import domain.Member;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -12,8 +11,8 @@ public class MembersFile {
 
     /**
      * MembersFile constructor
-     * @param fname
-     * @throws IOException
+     * @param fname the name we want the Members file to have
+     * @throws IOException in case of any error creating/opening the file
      */
     public MembersFile(String fname) throws IOException {
         this.raf=new RandomAccessFile(fname,"rw");

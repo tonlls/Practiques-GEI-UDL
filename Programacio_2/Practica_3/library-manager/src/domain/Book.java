@@ -4,18 +4,23 @@ package domain;
 import utils.PackUtils;
 
 public class Book {
-    
+    /**
+     * the limit size the title field can have
+     */
     public static final int TITLE_LIMIT = 20;
-    public static final int SIZE = 8+2*TITLE_LIMIT+8;
+    /**
+     * the size a whole Book object will fit in the file
+     */
+    public static final int SIZE = 8+(TITLE_LIMIT*2)+8;
     
     private final long id;
     private final String title;
     private long idMember;
 
     /**
-     * Book cláss constructor, initialize all the needed variables
-     * @param id
-     * @param title
+     * Book class constructor, initialize all the needed variables
+     * @param id Book object wanted id
+     * @param title Book object wanted title
      */
     public Book(long id, String title) {
         this.id=id;
@@ -27,7 +32,6 @@ public class Book {
         this.id=id;
         this.title=title;
         this.idMember=idSoci;
-        //throw new UnsupportedOperationException("step 1");
     }
 
     /**
@@ -36,7 +40,6 @@ public class Book {
      */
     public long getId() {
         return this.id;
-        //throw new UnsupportedOperationException("step 1");
     }
 
     /**
@@ -45,7 +48,6 @@ public class Book {
      */
     public String getTitle() {
         return this.title;
-        //throw new UnsupportedOperationException("step 1");
     }
 
     /**
