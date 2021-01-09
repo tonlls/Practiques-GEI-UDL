@@ -20,6 +20,7 @@ public class Employee extends Person {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Employee)) return super.equals(o);
+        if (!super.equals(o)) return false;
         Employee employee = (Employee) o;
         return salary == employee.salary;
     }

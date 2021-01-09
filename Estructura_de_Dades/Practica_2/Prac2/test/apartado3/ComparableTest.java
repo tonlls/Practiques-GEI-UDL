@@ -12,7 +12,7 @@ public class ComparableTest {
     }
     private boolean greaterThan(int compare,int to) {
         return compare>to;
-    }
+    }   
     @Test
     void upper(){
         Person p1 = new Person("JHON DOE");

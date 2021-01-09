@@ -9,7 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class ComparisonsTest {
     @Test
     void mixed1() {
-        List<Employee> employees = List.of(new Employee("John Doe", 150_000),
+        List<Employee> employees = List.of(
+                new Employee("John Doe", 150_000),
                 new Employee("Peter Parker", 12_000),
                 new Employee("Bruce Wayne", 999_999),
                 new Employee("Clark Kent", 45_000)

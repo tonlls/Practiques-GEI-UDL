@@ -29,6 +29,6 @@ public class Person implements Comparable<Person> {
 
     @Override
     public int compareTo(Person o) {
-        return name.toUpperCase().compareTo(o.name.toUpperCase());
+        return name.compareToIgnoreCase(o.name);
     }
 }

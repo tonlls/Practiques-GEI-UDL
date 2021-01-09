@@ -1,0 +1,68 @@
+Proveidor(#id,NIF,nom,descripcio,contacte)
+
+Comanda(#id,idProducte,idProveidor,data,quantitat,preu)
+  foreign key (idProducte) references Producte(id)
+  foreign key (idProveidor) references Proveidor(id)
+  constraint notNullProducte not null(idProducte)
+  constraint notNullProveidor not null(idProveidor)
+ 
+
+Categoria(#id,nom)
+
+Tecnica_neteja(#id,idCategoria,nom,descripcio)
+  foreign key (idCategoria) references Categoria(id)
+  constraint notNullCategoria not null(idCategoria)
+
+Tecnica_producte(#idProducte,#idTecnica)
+  foreign key (idProducte) references Producte(id)
+  foreign key (idTecnica) references Tecnica_neteja(id)
+  create assertion totsCheck (not exists (select * from Producte p where p.id not in(select  tp.idProducte from Tecnica_producte tp)))
+
+Problema_ocular(#id,nom,descripcio)
+
+Ulleres(#id,idProblema,nom,marca,preu,model,material)
+  foreign key (idProblema) references Problema_ocular(id)
+  constraint notNullProblema not null(idProblema)
+Lents_contacte(#id,idProblema,nom,marca,preu,tipus,color)
+  constraint notNullProblema not null(idProblema)
+  foreign key (idProblema) references Problema_ocular(id)
+create view Producte as
+    select id,idProblema,nom,marca,preu
+    from Ulleres
+    union
+    select id,nom,marca,preu
+    from Lents_contacte;
+
+Ciutat(#codi,nom)
+
+Optica(#id,codi_ciutat,nom,telefon)
+  foreign key (codi_ciutat) references Ciutat(codi)
+  constraint notNullCiutat not null(codi_ciutat)
+ 
+
+
+Publicitat(#id,idOptica,descripcio,autor,campanya,data_creacio)
+  foreign key (idOptica) references Optica(id)
+  constraint notNullCiutat not null(idOptica)
+ 
+
+Compra(#id,idProducte,idOptica,idClient,data)
+  foreign key (idProducte) references Producte(id)
+  foreign key (idOptica) references Optica(id)
+  foreign key (idClien) references Client(id)
+  constraint notNullProducte not null(idProducte)
+  constraint notNullOptica not null(idOptica)
+  constraint notNullClient not null(idClien)
+ 
+Client(#id,DNI,nom,cognoms,telefon)
+    
+
+Consulta(#idOptica,#idClient,data)
+  foreign key (idOptica) references Optica(id)
+  foreign key (idClient) references Client(id)
+
+Enviament(#idPublicitat,#idOtica,#idClient,data)
+  foreign key (idOptica) references Optica(id)
+  foreign key (idClient) references Client(id)
+  foreign key (idPublicitat) references Publicitat(id)
+
