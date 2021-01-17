@@ -4,8 +4,8 @@
 # PRA2: Guions bash
 # Codi font: prac2_2.sh
 #
+# Eduard Sales Jové
 # Ton Llucià Senserrich.
-# Nom complet autor2.
 # ----------------------------------------------------------------------
 
 if [ $# -ne 2 ]
