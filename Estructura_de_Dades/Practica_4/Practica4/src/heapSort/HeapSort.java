@@ -9,17 +9,12 @@ public class HeapSort {
         private final Comparator<? super E> comparator;
         int heapSize = 0;
         BinaryHeap(ArrayList<E> ele, Comparator<? super E> comparator) {
-            E el;
-//            this.elements = new ArrayList<E>();
             this.elements = ele;
-            //heapifyDown(ele.size()-1);
-            //heapifyUp(0);
             this.comparator = comparator;
-            /*while(ele.size()!=0) {
-                el=ele.get(0);
-                this.add(el);
-                ele.remove(0);
-            }*/
+            for(int i=0;i<elements.size();i++){
+                heapifyUp(i);
+                heapSize++;
+            }
         }
         static int parent(int index) {
             return (index-1)/2;
@@ -81,8 +76,8 @@ public class HeapSort {
     }
     public static <E> void sort(ArrayList<E> list,Comparator<? super E> cmp){
         BinaryHeap bh=new BinaryHeap(list,cmp);
-        while(bh.heapSize!=0) {
-            list.add(0,(E)bh.remove());
+        for(int i=list.size()-1;i>0;i--){
+            list.add(i,(E)bh.remove());
         }
     }
 
