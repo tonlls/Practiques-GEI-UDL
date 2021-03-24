@@ -1,0 +1,10 @@
+server:
+    afegir camps a l'struct client per tal que sigui mes facil fer el list+
+client:
+    configurar parametres
+problemes:
+    a la mem compartida hi ha d'accedir tots els processos
+    hem de fer semafors?
+    podem fer servir shared memory sense semafors?
+    en get_cfg i put_cfg hem de comprobar tots els paquets rebuts?-------------->si
+    

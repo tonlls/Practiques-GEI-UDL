@@ -10,11 +10,13 @@ def debug(text,error=False):
 			print('DEBUG: '+text)
 
 class Config:
-	def __init__(self,id,mac,server,port):
+	def __init__(self,id,mac,server,udp_port,cfg_file='boot.cfg'):
 		self.id=id
 		self.mac=mac
 		self.server=server
-		self.port=port
+		self.udp_port=udp_port
+		self.tcp_port=None
+		self.cfg_file=cfg_file
 	@staticmethod
 	def parseConfig(file):
 		with open(file) as f:
@@ -24,17 +26,7 @@ class Config:
 				tmp=l.split(' ')
 				lines[upper(tmp[0])]=tmp[1]
 			return Config(lines['ID'],lines['MAC'],lines['SERVER'],lines['SRV-PORT'])	
-class TCP:
-	def __init__(self):
-		pass
-	def connect(self):
-		pass
-	def send(self):
-		pass
-	def recive(self):
-		pass
-	def close(self):
-		pass
+
 class PDU:		
 	types={
 		'REGISTER_REQ': '0x10',
@@ -77,7 +69,7 @@ class PDU:
 	def from_conf(conf,type,num,data):
 		return PDU(type,conf.id,conf.mac,num,data)
 	@staticmethod
-	def parse_str(str):
+	def parse_str(str):#########################################################
 		st=''
 		j=4
 		data=[]
@@ -94,6 +86,23 @@ class PDU:
 				st+=str[i]
 		# print(data)
 		return PDU(data[0],data[1],data[2],data[3],data[4])
+class TCP:
+	# TODO:make config global var
+	def __init__(self,config):
+		self.config=config
+	def connect(self):###############################################################################################
+		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		# Connect the socket to the port where the server is listening
+		server_address = (config.tcp_server, 10000)
+		print('connecting to {} port {}'.format(*server_address))
+		sock.connect(server_address)
+		pass
+	def send(self):
+		pass
+	def recive(self):
+		pass
+	def close(self):
+		pass
 class UDP:
 	def __init__(self,config):
 		self.config=config
@@ -101,6 +110,7 @@ class UDP:
 		self.socket=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		debug('Connected to UDP server')
 	def send(self,pdu):
+		#maybe port =0????
 		self.socket.sendto(pdu.get_str().encode(), (self.config.server,self.config.port))
 		debug('UDP message sent')
 	def recive(self):
@@ -115,10 +125,14 @@ class UDP:
 		pass
 class Comands:
 	# sned a config file to the server
-	def put_cfg():
+	def put_cfg(conn,config):
+		len=os.path.getsize(config.cfg_file)
+		s=config.cfg_file+','+str(len)
+		conn.send(PDU(PDU.get_type('PUT_FILE'),config.id,config.mac,'00000',s))
 		pass
 	# read config file from the server
 	def get_cfg():
+		conn.read()
 		pass
 	# 
 	def quit(u,t):
@@ -140,12 +154,13 @@ def pprint(stri):
 def init():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-c',default='client.cfg',type=str)
+	# parser.add_argument('-d',default='client.cfg',type=str)
 	args = parser.parse_args()
-	config=parseConfig(args.c)
+	config=Config.parseConfig(args.c)
 
 # TODO:add a fork for udp client and a fork for tcp
 # init()
 u=UDP(Config("000001","111111111111",'127.0.0.1',5055))
 u.connect()
-u.send(PDU(PDU.get_type('REGISTER_ACK'),u.config.id,u.config.mac,'00000','adeu puta'))
+u.send(PDU(PDU.get_type('REGISTER_ACK'),u.config.id,u.config.mac,'000000','adeu puta'))
 a=u.recive()

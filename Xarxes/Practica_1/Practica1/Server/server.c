@@ -11,6 +11,8 @@
 #include <sys/select.h>
 #include <arpa/inet.h> 
 #include <netinet/in.h> 
+#include <sys/ipc.h>
+#include <sys/shm.h>
 
 #include <errno.h>
 
@@ -32,17 +34,17 @@
 
 int DEBUG=0;
 
-typedef enum {
-	DISCONECTED=0,
+typedef enum t_STATE{
+	DISCONNECTED=0,
 	WAIT_REG=1,
 	REGISTERED=2,
 	ALIVE=3
-}STATES;
-typedef enum {
+}STATE;
+typedef enum t_ERROR{
 	UDP_CREATION_ERR,
 	UDP_MSG_SEND_ERR
-}ERRORS;
-typedef enum {
+}ERROR_;
+typedef enum t_PDU_TYPE{
 	REGISTER_REQ=0x10,
 	REGISTER_ACK=0x11,
 	REGISTER_NACK=0x12,
@@ -64,18 +66,33 @@ typedef enum {
 	GET_NACK=0x43,
 	GET_REJ=0x44,
 	GET_END=0x45
-}PDU_TYPES;
-typedef struct{
-	unsigned char type;
+}PDU_TYPE;
+
+typedef struct t_pdu{
+	PDU_TYPE type;
 	char id[ID_LEN];
 	char mac[MAC_LEN];
 	char num[RAND_LEN];
 	char data[DATA_LEN];
 }pdu;
-typedef struct{
+typedef struct t_client{
+	STATE actual_state;
 	char id[ID_LEN];
 	char mac[MAC_LEN];
+	char num[RAND_LEN];
+	struct sockaddr_in cliaddr;
+	int sock;
 }client;
+typedef struct t_shared_mem{
+	client clis[MAX_CLI];
+	int n_clis;
+}shared_mem;
+typedef struct t_config{
+	char id[ID_LEN];
+	char mac[MAC_LEN];
+	int udp_port;
+	int tcp_port;
+}config;
 /* SHARED MEMORY */
 
 /*  UTILS  */
@@ -167,7 +184,7 @@ int pdu2str(pdu pdu,char str[]){
 }
 
 
-void create_pdu(pdu *pdu,unsigned char type,char id[ID_LEN],char mac[MAC_LEN],char data[DATA_LEN]){
+void create_pdu(pdu *pdu,PDU_TYPE type,char id[ID_LEN],char mac[MAC_LEN],char data[DATA_LEN]){
 	pdu->type=type;
 	strcpy(pdu->id,id);
 	strcpy(pdu->mac,mac);
@@ -177,7 +194,7 @@ void create_pdu(pdu *pdu,unsigned char type,char id[ID_LEN],char mac[MAC_LEN],ch
 
 
 /* TCP */
-void tcp_create_server(int *sockfd,struct sockaddr_in *servaddr,struct sockaddr_in *cliaddr){
+void tcp_create_server(int *sockfd,struct sockaddr_in *servaddr,struct sockaddr_in *cliaddr,config cfg){
 	if ( (*sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0 ) { 
 		debug("socket creation failed"); 
 		exit(EXIT_FAILURE); 
@@ -186,7 +203,7 @@ void tcp_create_server(int *sockfd,struct sockaddr_in *servaddr,struct sockaddr_
 	memset(cliaddr, 0, sizeof(*cliaddr)); 
 	servaddr->sin_family = AF_INET; 
 	servaddr->sin_addr.s_addr = htonl(INADDR_ANY); 
-	servaddr->sin_port = htons(34);//TODO add port parameter
+	servaddr->sin_port = htons(cfg.tcp_port);//TODO add port parameter
 	//if (bind(*sockfd,(const struct sockaddr *)servaddr,sizeof(*servaddr))<0) {
 	if ((bind(*sockfd, (const struct sockaddr *)servaddr, sizeof(*servaddr))) != 0) { 
 		debug("TCP socket bind failed"); 
@@ -219,12 +236,99 @@ void tcp_recive(int sock,pdu *msg){
 void tcp_close(int *socketfd){
 	close(socketfd);
 }
-void tcp_attend_client(){}
-void tcp_server(){
+/* ACTIONS */
+void wait_file(int sock,char file[]){/////////////////////////////////////////////////////////////////////////
+	char buff[PDU_LEN];
+	pdu p;
+	int ret;
+	//TODO: track file creation error
+	FILE *f=fopen(file,"w");
+	FD_ZERO(&rfds);
+    FD_SET(sock, &rfds);
+	do{
+		//TODO:add timing
+		ret=select(sock+1, &rfds, NULL, NULL, NULL);
+		if(ret==-1){
+		//TODO: check errors
+		}else{
+			tcp_recive(sock,buff);
+			str2pdu(buff,&p);
+			//TODO: check_pdu()
+			if(p.type==PUT_DATA){
+				fprintf(f,"%s\n",p.data);
+			}
+		}
+	}while(p.type==PUT_DATA);
+	if(p.type!=PUT_END){
+		//TODO: ERRRRRRRRRRRRRROOOOOOOOOOOOOOOOOOR
+	}
+	close(f);
+	// close(sock);
+}
+void send_file(int sock,char file[]){///////////////////////////////////////////////////////////////////////////////////////////////
+	pdu p;
+	do{
+		tcp_send(sock,&p);
+
+	}while();
+}
+//send file to client
+void get_file(int sock,pdu msg,client cli,client me){
+	pdu p;
+	int e;
+	char buff[PDU_LEN];
+	FILE *f;
+	if(check_pdu(cli,msg)){
+		sprintf(buff,"%s.cfg",cli.id);
+		create_pdu(&p,GET_DATA,me.id,me.mac,buff);
+		tcp_send(sock,p);
+		send_file(sock,buff);
+	}
+}
+//get file from client
+void put_file(int sock,pdu recived,client cli,client me){
+	pdu p;
+	int e;
+	char buff[DATA_LEN];
+	//check client
+	if(check_pdu(cli,recived)){
+		sprintf(buff,"%s.cfg",cli.id);
+		create_pdu(&p,PUT_ACK,me.id,me.mac,buff);
+		tcp_send(sock,p);
+		wait_file(sock,buff);
+	}else{
+		//TODO: add reject if data isn't correct
+		create_pdu(&p,PUT_REJ,me.id,me.mac,me)
+		tcp_send(sock,p);
+	}
+	//close client()
+}
+int check_pdu(client cli,pdu msg){
+	return strcmp(cli.id,msg.id)==0&&strcmp(cli.mac,msg.mac)==0&&strcmp(cli.num,msg.num)==0&&
+}
+void choose_act(int sock,client cli,pdu p,client me){
+	switch(p.type){
+		case PUT_FILE:
+			put_file(sock,cli,me);
+			break;
+		case GET_FILE:
+			get_file(sock,cli,me);
+			break;
+	}
+}
+/////////////////////////
+
+void tcp_attend_client(config cfg){////////////////////////////////////////////////////////////////////////
+	pdu p;
+	//read()
+	//tcp_recive();
+	choose_act(p);
+}
+void tcp_server(config cfg){
 	int sockfd,len,pid,client;
 	pdu pdu;
 	struct sockaddr_in servaddr, cliaddr;
-	tcp_create_server(&sockfd,&servaddr,&cliaddr);
+	tcp_create_server(&sockfd,&servaddr,&cliaddr,cfg);
 	len = sizeof(cliaddr);
 	//TODO get signal to end proces
 	while(1){
@@ -235,7 +339,7 @@ void tcp_server(){
 		else{
 			pid=fork();
 			if(pid!=0)
-				tcp_attend_client();
+				tcp_attend_client(cfg);
 		}
 			printf("server acccept the client...\n"); 
   
@@ -256,7 +360,7 @@ void tcp_server(){
 	exit(0);
 }
 /* UDP */
-void udp_create_server(int *sockfd,struct sockaddr_in *servaddr, struct sockaddr_in *cliaddr,int port){
+void udp_create_server(int *sockfd,struct sockaddr_in *servaddr, struct sockaddr_in *cliaddr,config cfg){
 	// Creating socket file descriptor 
 	if ( (*sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) { 
 		debug("socket creation failed"); 
@@ -268,7 +372,7 @@ void udp_create_server(int *sockfd,struct sockaddr_in *servaddr, struct sockaddr
 	servaddr->sin_family = AF_INET; // IPv4 
 	// servaddr->sin_addr.s_addr = INADDR_ANY; 
 	servaddr->sin_addr.s_addr = htons(INADDR_ANY); 
-	servaddr->sin_port = htons(port);  
+	servaddr->sin_port = htons(cfg.udp_port);  
 
 	// Bind the socket with the server address 
 	//TODO: bind in a loop and cerate a proc for each bind
@@ -313,7 +417,7 @@ void udp_close(int sock){
 	close(sock);
 	debug("UDP server cloosed");
 }
-void read_clients(char file[],client clis[],int *num_clis){
+void read_clients(char file[],shared_mem *sh_mem){
 	int e;
 	FILE *fd=fopen(file,"r");
 	char id[ID_LEN],mac[MAC_LEN],c[2];
@@ -321,37 +425,52 @@ void read_clients(char file[],client clis[],int *num_clis){
 	do{
 		e=fscanf(fd,"%s %s",id,mac);
 		if(e==2){
-			strcpy(clis[*num_clis].id,id);
-			strcpy(clis[*num_clis].mac,mac);
-			(*num_clis)++;
+			strcpy(sh_mem->clis[sh_mem->n_clis].id,id);
+			strcpy(sh_mem->clis[sh_mem->n_clis].mac,mac);
+			sh_mem->clis[sh_mem->n_clis].actual_state=DISCONNECTED;
+			sh_mem->n_clis++;
 		}
 		read(fd,id,1);
-		/*read(fd,id,ID_LEN-1);
-		id[ID_LEN-1]='\0';
-		strcpy(clis[*num_clis].id,id);
-		read(fd,c,1);
-		read(fd,mac,MAC_LEN-1);
-		mac[MAC_LEN-1]='\0';
-		strcpy(clis[*num_clis].mac,mac);
-		e=read(fd,c,1);*/
-
-	}while(e==2);
+	}while(feof(fd));
+	fclose(fd);
 }
-int check_client(client c,client clis[],int num_clis){
-	for(int i=0;i<num_clis;i++){
-		if(strcmp(c.id,clis[i].id)==0&&strcmp(c.mac,clis[i].mac)==0)
+//TODO: repair function to use shared memory
+int check_client(client c,shared_mem sh_mem){
+	//TODO: check ips
+	// char str[INET_ADDRSTRLEN];
+	// inet_ntop( AF_INET, &ipAddr, str, INET_ADDRSTRLEN );
+	for(int i=0;i<sh_mem.n_clis;i++){
+		if(strcmp(c.id,sh_mem.clis[i].id)==0&&strcmp(c.mac,sh_mem.clis[i].mac)==0)
 			return i;
 	}
 	return -1;
 }
-void udp_attend_client(struct sockaddr_in *cli){
+void udp_refuse(){
+	pdu p;
+	create_pdu(&p,REGISTER_ACK,)
+}
+void udp_accept(){
+	pdu p;
+	create_pdu(&p,)
 
 }
-void udp_server(){//function for runing on udp proces
+void udp_attend_client(client c,shared_mem sh_mem){
+	//check client
+	int e=check_client(c,sh_mem);
+	if(e==-1)//error el client no te permis
+		udp_refuse();
+	else if(sh_mem.clis[e].actual_state!=0)//client alredy connected
+		udp_refuse();
+	else{//cli ok
+		udp_accept();
+	}
+
+}
+void udp_server(config cfg){//function for runing on udp proces
 	int sockfd;
 	pdu pdu;
 	struct sockaddr_in servaddr, cliaddr; 
-	udp_create_server(&sockfd,&servaddr,&cliaddr,5055);
+	udp_create_server(&sockfd,&servaddr,&cliaddr,cfg);////////////////////////////////////////
 	// while(1){
 		udp_recive(sockfd,&cliaddr,&pdu);
 		//TODO:check another time pls
@@ -368,7 +487,7 @@ void udp_server(){//function for runing on udp proces
 	exit(0);
 }
 /* CONFIG */
-void read_config(char file[],char id[],char mac[],int *udp_port,int *tcp_port){
+void read_config(char file[],config *cfg){
 	char name[100],value[100];
 	FILE *config=fopen(file,"r");
 	int i=4,e;
@@ -377,15 +496,15 @@ void read_config(char file[],char id[],char mac[],int *udp_port,int *tcp_port){
 		// printf("%d\n",e);
 		if(e==2){
 			if(strcmp(name,"Id")==0)
-				strcpy(id,value);
+				strcpy(cfg->id,value);
 			else if(strcmp(name,"MAC")==0)
-				strcpy(mac,value);
+				strcpy(cfg->mac,value);
 			else if(strcmp(name,"UDP-port")==0)
 				// printf("%d\n",atoi(value));
-				(*udp_port)=atoi(value);
+				cfg->udp_port=atoi(value);
 			else if(strcmp(name,"TCP-port")==0)
 				// printf("%d\n",atoi(value));
-				(*tcp_port)=atoi(value);
+				cfg->tcp_port=atoi(value);
 		}
 		read(config,value,1);
 		i--;
@@ -457,6 +576,22 @@ void console(){
 	}
 }
 
+/* shared memory */
+void init_shared_mem(int *shmid,shared_mem *sh_mem){
+	if(((*shmid)=shmget(IPC_PRIVATE,sizeof(shared_mem),IPC_CREAT))<0){
+		perror("shmget"),
+		exit -1;
+	}
+	sh_mem=(shared_mem *)shmat((*shmid),0,0);
+	sh_mem->n_clis=0;
+	/**mem=0;
+	if(mem==0){
+		perror("shmat");
+		exit -1;
+	}*/
+}
+
+
 /* MAIN */
 int main(int argc,char *argv[]) {
 	char config_file[MAX_FILENAME]="server.cfg";
@@ -466,23 +601,26 @@ int main(int argc,char *argv[]) {
 	int tcp_port,udp_port;
 	
 	//shared
-	client clis[20];
-	//n_cli shared
+	int shmid;
+	shared_mem *sh_mem;
+	config cfg;
 	int n_cli;
 	
-	int pid;//=fork();
-	struct sockaddr_in clients[MAX_CLI];
+	int pid;
+	
+	init_shared_mem(&shmid,sh_mem);
 
 	parse_parameters(argc,argv,config_file,computer_file);
-	read_config(config_file,id,mac,&udp_port,&tcp_port);
-	read_clients(computer_file,clis,&n_cli);
+	read_config(config_file,&cfg);
+	read_clients(computer_file,sh_mem);
 	
+
 	pid=fork();
 	if(pid==0)
-		udp_server();
+		udp_server(cfg);
 	pid=fork();
 	if(pid==0)
-		tcp_server();
+		tcp_server(cfg);
 	pid=fork();
 	if(pid==0)
 		console();
