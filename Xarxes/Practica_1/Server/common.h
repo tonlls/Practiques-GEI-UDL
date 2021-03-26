@@ -109,7 +109,8 @@ int itsip(char []);
 void str2pdu(char [],pdu *);
 void concat(char [],char [],int );
 int pdu2str(pdu ,char []);
-void create_pdu(pdu *,PDU_TYPE ,char [ID_LEN],char [MAC_LEN],char [DATA_LEN]);
+void create_pdu(pdu *,PDU_TYPE,char [ID_LEN],char [MAC_LEN],int,char [DATA_LEN]);
+// void create_pdu(pdu *,PDU_TYPE ,char [ID_LEN],char [MAC_LEN],char [DATA_LEN]);
 int check_pdu(client ,pdu );
 void read_clients(char [],shared_mem *);
 //TODO: repair function to use shared memory

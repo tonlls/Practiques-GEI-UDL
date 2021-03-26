@@ -40,7 +40,7 @@ int udp_send(int sock,struct sockaddr_in *cli,pdu msg){
 
 }
 
-void udp_recive(int sock,struct sockaddr_in *cli,pdu *msg){
+int udp_recive(int sock,struct sockaddr_in *cli,pdu *msg){
 	char buff[PDU_LEN+1];
 	int len = sizeof(*cli);  //len is value/resuslt 
 	debug("listening for udp messages");
@@ -52,6 +52,7 @@ void udp_recive(int sock,struct sockaddr_in *cli,pdu *msg){
 	}
 	debug("udp message recived");
 	str2pdu(buff,msg);
+	return 0;
 }
 void udp_close(int sock){
 	close(sock);

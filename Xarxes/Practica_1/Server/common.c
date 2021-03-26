@@ -117,7 +117,8 @@ void read_clients(char file[],shared_mem *sh_mem){
 			sh_mem->clis[sh_mem->n_clis].actual_state=DISCONNECTED;
 			sh_mem->n_clis++;
 		}
-		read(fd,id,1);
+		fread(id,1,1,fd);
+		// read(fd,id,1);
 	}while(feof(fd));
 	fclose(fd);
 }
@@ -151,7 +152,8 @@ void read_config(char file[],config *cfg){
 				// printf("%d\n",atoi(value));
 				cfg->tcp_port=atoi(value);
 		}
-		read(config,value,1);
+		fread(value,1,1,config);
+		// read(config,value,1);
 		i--;
 	}while(e==2&&i>0);
 }
@@ -191,8 +193,14 @@ int check_command(char str[]){
         printf("Comand '%s' dosen't exist.\n",str);
     return 0;
 }
-void list(){
+void list(shared_mem sh_mem){
 	//acces shared mem and loop through then connected clients to show them
+	client c;
+	for(int i=0;i<sh_mem.n_clis;i++){
+		c=sh_mem.clis[sh_mem.n_clis];
+		if(c.actual_state==ALIVE)
+			printf("%s",c.mac);//TODO: print all
+	}
 }
 void quit(){
 	//kill(getppid(),SIGUSR1);
