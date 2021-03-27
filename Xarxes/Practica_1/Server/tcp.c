@@ -68,11 +68,12 @@ void wait_file(int sock,char file[]){///////////////////////////////////////////
 	if(p.type!=PUT_END){
 		//TODO: ERRRRRRRRRRRRRROOOOOOOOOOOOOOOOOOR
 	}
-	close(f);
-	// close(sock);
+	fclose(f);
+	// fclose(sock);
 }
-void send_file(int sock,char file[]){///////////////////////////////////////////////////////////////////////////////////////////////
+void send_file(int sock,client cli,char file[]){///////////////////////////////////////////////////////////////////////////////////////////////
 	pdu p;
+	create_pdu(&p,)
 	do{
 		tcp_send(sock,&p);
 
@@ -117,13 +118,17 @@ void choose_act(int sock,client cli,pdu p,client me){
 		case GET_FILE:
 			get_file(sock,cli,me);
 			break;
+		case ALIVE_INF:
+			break;
+		case default:
+			break;
 	}
 }
 void tcp_attend_client(config cfg){////////////////////////////////////////////////////////////////////////
 	pdu p;
 	//read()
 	//tcp_recive();
-	// choose_act(p);
+	choose_act(p);
 }
 void tcp_server(config cfg){
 	int sockfd,len,pid,client;

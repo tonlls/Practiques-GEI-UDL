@@ -1,7 +1,7 @@
 
 #include "common.h"
-#ifndef foo_c__
-#define foo_c__
+#ifndef common_c__
+#define common_c__
  
 /*  UTILS  */
 void error(char str[]){

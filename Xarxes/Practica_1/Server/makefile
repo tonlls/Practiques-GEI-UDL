@@ -2,8 +2,8 @@ default:clear
 	# gcc -ansi -pedantic -Wall -std=c17 -o server server.c
 	# gcc -c common.c udp.c tcp.c server.c
 	# gcc -c common.c
-	gcc -c udp.c
-	# gcc -c tcp.c 
+	# gcc -c udp.c
+	gcc -c tcp.c 
 	# gcc -c server.c
 	# gcc -ansi -pedantic -Wall -std=c17  server.o -o server
 default_o:clear_o

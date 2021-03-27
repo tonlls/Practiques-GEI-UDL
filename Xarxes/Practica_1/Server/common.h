@@ -1,6 +1,6 @@
 // Server side implementation of UDP client-server model 
-#ifndef foo_h__
-#define foo_h__
+#ifndef common_h__
+#define common_h__
  
 // extern void foo(void);
  
