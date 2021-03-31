@@ -75,7 +75,8 @@ class PDU:
 		data=[]
 		data.append(str[0:4])
 		str=str[4:]
-		for i in range(0,len(str)):
+		data+=str.split('\0')
+		'''for i in range(0,len(str)):
 			if j==0:
 				break
 			if(str[i]=='\0'):
@@ -83,7 +84,7 @@ class PDU:
 				j-=1
 				st=''
 			else:
-				st+=str[i]
+				st+=str[i]'''
 		# print(data)
 		return PDU(data[0],data[1],data[2],data[3],data[4])
 class TCP:

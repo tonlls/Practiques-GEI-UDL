@@ -26,10 +26,10 @@ void udp_create_server(int *sockfd,struct sockaddr_in *servaddr, struct sockaddr
 //TODO check for errors while calling functions
 int udp_send(int sock,struct sockaddr_in *cli,pdu msg){
 	int len = sizeof(*cli);  //len is value/resuslt
-	char buff[PDU_LEN+1];
+	char buff[UDP_PDU_LEN+1];
 	int size=pdu2str(msg,buff);
 	// printf("(%d) -> %s",size,buff);
-	if(sendto(sock,(const char *)buff,PDU_LEN+1,0,(const struct sockaddr *)cli,len)<0){
+	if(sendto(sock,(const char *)buff,UDP_PDU_LEN+1,0,(const struct sockaddr *)cli,len)<0){
 		debug("error on sending UDP message");
 		//TODO return error from enum if needed
 		return -1;
@@ -41,12 +41,12 @@ int udp_send(int sock,struct sockaddr_in *cli,pdu msg){
 }
 
 int udp_recive(int sock,struct sockaddr_in *cli,pdu *msg){
-	char buff[PDU_LEN+1];
+	char buff[UDP_PDU_LEN+1];
 	int len = sizeof(*cli);  //len is value/resuslt 
 	debug("listening for udp messages");
-	int n = recvfrom(sock,(char *)buff,PDU_LEN+1,MSG_WAITALL,(struct sockaddr *)cli,(unsigned int * restrict)&len); 
+	int n = recvfrom(sock,(char *)buff,UDP_PDU_LEN+1,MSG_WAITALL,(struct sockaddr *)cli,(unsigned int * restrict)&len); 
 	buff[n] = '\0';
-	if(n<0){
+	if(n<0||n>UDP_PDU_LEN){
 		debug("error while reciving an UDP message");
 		return -1;
 	}

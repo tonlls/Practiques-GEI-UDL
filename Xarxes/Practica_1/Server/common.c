@@ -93,7 +93,7 @@ int pdu2str(pdu pdu,char str[]){
 }
 
 
-void create_pdu(pdu *pdu,PDU_TYPE type,char id[ID_LEN],char mac[MAC_LEN],int num,char data[DATA_LEN]){
+void create_pdu(pdu *pdu,PDU_TYPE type,char id[ID_LEN],char mac[MAC_LEN],int num,char data[]){
 	pdu->type=type;
 	strcpy(pdu->id,id);
 	strcpy(pdu->mac,mac);

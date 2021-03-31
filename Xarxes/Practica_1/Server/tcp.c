@@ -28,23 +28,24 @@ void tcp_create_server(int *sockfd,struct sockaddr_in *servaddr,struct sockaddr_
    
 }
 void tcp_send(int sock,pdu msg){
-	char buff[PDU_LEN+1];
+	char buff[TCP_PDU_LEN+1];
 	pdu2str(msg,buff);
 	write(sock, buff, sizeof(buff)); 
 	debug("TCP message sent");
 }
 void tcp_recive(int sock,pdu *msg){
-	char buff[PDU_LEN+1];
-	read(sock, buff, sizeof(buff));
+	char buff[TCP_PDU_LEN+1];
+	int n=read(sock, buff, sizeof(buff));
 	debug("TCP message recived");
 	str2pdu(buff,msg);
 }
 void tcp_close(int *socketfd){
 	close(socketfd);
+	exit(0);
 }
 /* ACTIONS */
 void wait_file(int sock,char file[]){/////////////////////////////////////////////////////////////////////////
-	char buff[PDU_LEN];
+	char buff[TCP_PDU_LEN];
 	pdu p;
 	int ret,rfds;
 	//TODO: track file creation error
@@ -54,6 +55,7 @@ void wait_file(int sock,char file[]){///////////////////////////////////////////
 	do{
 		//TODO:add timing
 		ret=select(sock+1, &rfds, NULL, NULL, NULL);
+		debug("waiting for client to send file");
 		if(ret==-1){
 		//TODO: check errors
 		}else{
@@ -71,29 +73,41 @@ void wait_file(int sock,char file[]){///////////////////////////////////////////
 	fclose(f);
 	// fclose(sock);
 }
-void send_file(int sock,client cli,char file[]){///////////////////////////////////////////////////////////////////////////////////////////////
+void send_file(int sock,client cli,config cfg,char file[]){///////////////////////////////////////////////////////////////////////////////////////////////
 	pdu p;
-	create_pdu(&p,)
-	do{
+	char buff[200];//TODO:ADD LINE LEN
+	size_t len=0;
+	FILE *f=fopen(file,"r");
+	if(f<0){
+		//error
+	}
+	create_pdu(&p,GET_DATA,cfg.id,cfg.mac,atoi(cli.num),"");
+	while (getline(&buff, &len, f)!=-1) {
+		strcpy(p.data,buff);
 		tcp_send(sock,&p);
-
-	}while();
+        // printf("Retrieved line of length %zu:\n", read);
+        printf("%s", line);
+    }
+	p.type=GET_END;
+	strcpy(p.data,"");
+	tcp_send(sock,&p);
 }
 //send file to client
-void get_file(int sock,pdu msg,client cli,config cfg){
+void put_file(int sock,pdu msg,client cli,config cfg){
 	pdu p;
 	int e;
-	char buff[PDU_LEN];
+	char buff[TCP_PDU_LEN];
 	FILE *f;
 	if(check_pdu(cli,msg)){
 		sprintf(buff,"%s.cfg",cli.id);
-		create_pdu(&p,GET_DATA,cfg.id,cfg.mac,atoi(cli.num),buff);
+		create_pdu(&p,GET_ACK,cfg.id,cfg.mac,atoi(cli.num),buff);
 		tcp_send(sock,p);
-		send_file(sock,buff);
+		send_file(sock,cli,cfg,buff);
 	}
+	//TODO: tancar canal tcp;
 }
 //get file from client
-void put_file(int sock,pdu recived,client cli,client me){
+void get_file(int sock,pdu recived,client cli,client me){
 	pdu p;
 	int e;
 	char buff[DATA_LEN];
@@ -109,14 +123,15 @@ void put_file(int sock,pdu recived,client cli,client me){
 		tcp_send(sock,p);
 	}
 	//close client()
+	//TODO: tancar canal tcp;
 }
 void choose_act(int sock,client cli,pdu p,client me){
 	switch(p.type){
 		case PUT_FILE:
-			put_file(sock,cli,me);
+			get_file(sock,cli,me);
 			break;
 		case GET_FILE:
-			get_file(sock,cli,me);
+			put_file(sock,cli,me);
 			break;
 		case ALIVE_INF:
 			break;
@@ -124,10 +139,10 @@ void choose_act(int sock,client cli,pdu p,client me){
 			break;
 	}
 }
-void tcp_attend_client(config cfg){////////////////////////////////////////////////////////////////////////
+void tcp_attend_client(int sock,config cfg){////////////////////////////////////////////////////////////////////////
 	pdu p;
 	//read()
-	//tcp_recive();
+	tcp_recive();
 	choose_act(p);
 }
 void tcp_server(config cfg){
@@ -145,7 +160,7 @@ void tcp_server(config cfg){
 		else{
 			pid=fork();
 			if(pid!=0)
-				tcp_attend_client(cfg);
+				tcp_attend_client(client,cfg);
 		}
 			printf("server acccept the client...\n"); 
   
