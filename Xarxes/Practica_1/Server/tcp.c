@@ -1,4 +1,5 @@
 #include "common.c"
+#define W 3
 /* TCP */
 void tcp_create_server(int *sockfd,struct sockaddr_in *servaddr,struct sockaddr_in *cliaddr,config cfg){
 	if ( (*sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0 ) { 
@@ -43,24 +44,38 @@ void tcp_close(int *socketfd){
 	close(socketfd);
 	exit(0);
 }
+
+
+
+void tcp_error(){
+
+}
 /* ACTIONS */
-void wait_file(int sock,char file[]){/////////////////////////////////////////////////////////////////////////
+void wait_file(int sock,client cli,config cfg,char file[]){/////////////////////////////////////////////////////////////////////////
 	char buff[TCP_PDU_LEN];
 	pdu p;
 	int ret,rfds;
+	struct timeval tv;
 	//TODO: track file creation error
 	FILE *f=fopen(file,"w");
+	tv.tv_sec = W; 
+	tv.tv_usec = 0;
 	FD_ZERO(&rfds);
     FD_SET(sock, &rfds);
 	do{
 		//TODO:add timing
-		ret=select(sock+1, &rfds, NULL, NULL, NULL);
+		ret=select(sock+1, &rfds, NULL, NULL, &tv);
 		debug("waiting for client to send file");
 		if(ret==-1){
 		//TODO: check errors
 		}else{
-			tcp_recive(sock,buff);
-			str2pdu(buff,&p);
+			tcp_recive(sock,&p);
+			//TODO: add/test timeout
+			if(check_pdu(cli,p);){
+				tcp_reject(sock);
+			}
+			choose_act(sock,cli,p,cfg)
+			// str2pdu(buff,&p);
 			//TODO: check_pdu()
 			if(p.type==PUT_DATA){
 				fprintf(f,"%s\n",p.data);
@@ -107,7 +122,7 @@ void put_file(int sock,pdu msg,client cli,config cfg){
 	//TODO: tancar canal tcp;
 }
 //get file from client
-void get_file(int sock,pdu recived,client cli,client me){
+void get_file(int sock,pdu recived,client cli,config cfg){
 	pdu p;
 	int e;
 	char buff[DATA_LEN];
@@ -116,7 +131,7 @@ void get_file(int sock,pdu recived,client cli,client me){
 		sprintf(buff,"%s.cfg",cli.id);
 		create_pdu(&p,PUT_ACK,cfg.id,cfg.mac,atoi(cli.num),buff);
 		tcp_send(sock,p);
-		wait_file(sock,buff);
+		wait_file(sock,cli,cfg,buff);
 	}else{
 		//TODO: add reject if data isn't correct
 		create_pdu(&p,PUT_REJ,cfg.id,cfg.mac,atoi(cli.num),"");
@@ -125,15 +140,21 @@ void get_file(int sock,pdu recived,client cli,client me){
 	//close client()
 	//TODO: tancar canal tcp;
 }
-void choose_act(int sock,client cli,pdu p,client me){
+void reply_alive(int sock,config cfg,client c){
+	pdu p;
+	create_pdu(&p,ALIVE_ACK,conf.id,cfg.mac,c.num,"");
+	tcp_send(sock,p);
+}
+void choose_act(int sock,client cli,pdu p,config cfg){
 	switch(p.type){
 		case PUT_FILE:
-			get_file(sock,cli,me);
+			get_file(sock,cli,cfg);
 			break;
 		case GET_FILE:
-			put_file(sock,cli,me);
+			put_file(sock,cli,cfg);
 			break;
 		case ALIVE_INF:
+			reply_alive(sock,cfg,cli);
 			break;
 		case default:
 			break;
@@ -142,8 +163,12 @@ void choose_act(int sock,client cli,pdu p,client me){
 void tcp_attend_client(int sock,config cfg){////////////////////////////////////////////////////////////////////////
 	pdu p;
 	//read()
-	tcp_recive();
-	choose_act(p);
+	while(){
+		tcp_recive(sock,&p);
+		check_client(p);
+		choose_act(p);
+	}
+	// tcp_close(sock,);
 }
 void tcp_server(config cfg){
 	int sockfd,len,pid,client;

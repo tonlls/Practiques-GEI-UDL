@@ -88,23 +88,58 @@ class PDU:
 		# print(data)
 		return PDU(data[0],data[1],data[2],data[3],data[4])
 class TCP:
+	# TODO:repair size
+	MSG_SIZE=20
 	# TODO:make config global var
 	def __init__(self,config):
 		self.config=config
 	def connect(self):###############################################################################################
-		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		# Connect the socket to the port where the server is listening
-		server_address = (config.tcp_server, 10000)
+		self.server_address = (config.tcp_server, 10000)
 		print('connecting to {} port {}'.format(*server_address))
-		sock.connect(server_address)
+		self.sock.connect(server_address)
+	def send_file(self,filename):
+		lines=None
+		with f=open(filename,'r'):
+			lines=f.readlines()
+		p=PDU.from_conf(self.config,)
+		for l in lines:
+			p.data=l
+			self.send(p)
+		p.data=''
+		p.type=PDU.get_type('PUT_END')
+		self.send(p)
+	def recive_file(self,filename):
+		end=False
+		with f=open(filename,'w'):
+			while(not end):
+				p=self.recive()
+				if p.type==PDU.get_type(''):
+					end=True
+				else:
+					f.write(p.data)
+		# //TODO:to end
+		self.send(PDU.from_conf(self.conf,PDU.get_type('END'),))
 		pass
-	def send(self):
-		pass
+	def send(self,pdu):
+		self.sock.send(pdu.get_str().encode())
+		debug('TCP message sent')
 	def recive(self):
-		pass
+		r=self.sock.recv(MSG_SIZE)
+		debug('TCP message recived')
+		return PDU.parse_str(r)
 	def close(self):
-		pass
+		self.sock.close()
 class UDP:
+	# TODO:repair size
+	MSG_SIZE=10
+	n=3
+	t=1
+	m=3
+	p=7
+	s=2
+	q=2
 	def __init__(self,config):
 		self.config=config
 	def connect(self):
@@ -114,15 +149,34 @@ class UDP:
 		#maybe port =0????
 		self.socket.sendto(pdu.get_str().encode(), (self.config.server,self.config.port))
 		debug('UDP message sent')
-	def recive(self):
+	def recive(self,timeout=None):
+		if timeout!=None:
+			self.socket.settimeout(timeout)
 		data,addr=self.socket.recvfrom(self.config.port)
+		if timeout!=None:
+			self.socket.settimeout(None)
 		debug('UDP message recived')
 		# maybe decode???
+		if data==None:
+			return None
 		return PDU.parse_str(data)
 	def close(self):
 		self.socket.close()
 		debug('UDP server closed')
 	def reg_req(self):
+		p=PDU(PDU.get_type('REGISTER_REQ'),self.config.id,self.config.mac,000000,"")
+		data=None
+		n=0
+		m=UDP.m
+		t=UDP.t
+		while  and data==None 
+			while n<UDP.p and data==None:
+				self.send(p)
+				data=self.recive(t)
+				if n>=PDU.n and t<UDP.t*UDP.m:
+					t+=t
+				else:
+					n+=1
 		pass
 class Comands:
 	# sned a config file to the server
