@@ -8,7 +8,6 @@ def soil_generator(n):
    beta = random.randint(1,100)
 
    points_x = sorted(random.sample(range(1,n*10), n))
-   # print(n, h, alpha, beta)
 
    points = []
    for x in points_x:
@@ -18,12 +17,7 @@ def soil_generator(n):
 
 def test_aqueducte(n):
     h, alpha, beta, points = soil_generator(n)
-    # xs, ys = list(zip(*points)) #si a vuestra función le pasáis como paŕametros una lista con todas las X y otra lista con todas las Y, haced esto. Si no, ignorad esta línea y en lugar de xs e ys, pasáis points.
-    # aqueductes.n = n #esto lo teneis que hacer si usáis variables globales en vuestro programa
-    # aqueductes.h = h
-    # aqueductes.calcular_cost_pont(n, h, alpha, beta, xs, ys) #nombre_programa.nombre_función, llamáis a vuestra función que calcula los costes 
-    # aqueductes.calcular_cost_pont(n, h, alpha, beta, xs, ys) #nombre_programa.nombre_función, llamáis a vuestra función que calcula los costes 
-    aqueducte.calc((n, h, alpha, beta, points)) #nombre_programa.nombre_función, llamáis a vuestra función que calcula los costes 
+    aqueducte.calc((n, h, alpha, beta, points))
 
 def calcular_temps():
     import timeit

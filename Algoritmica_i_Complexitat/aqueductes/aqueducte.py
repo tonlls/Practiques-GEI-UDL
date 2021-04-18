@@ -70,9 +70,8 @@ def its_posible_2pilars(f_input):
     Return:
         returns a boolean
     """
-    height,_,_,rects=f_input[1:]
+    _,height,_,_,rects=f_input
     rads=calc_radius([rects[0],rects[-1]])[0]
-    # print(rads)
     for i in range(1,len(rects)):
         if rects[i][1]>=height or not possible_pic(height,rads,[rects[0],rects[-1]],rects[i]):
             return False

@@ -76,7 +76,7 @@ def its_posible_2pilars(f_input):
 
 def its_posible_2pilars_rec(height,rects,rad,cols):
     """"
-    tis function is used by the recursive algorithm
+    tis function is used by the recursive algorithm in function its_posible_2pilars
     Args:
         height: the desired height of the pont/aqueducte
         rects: the point to check
@@ -92,15 +92,36 @@ def its_posible_2pilars_rec(height,rects,rad,cols):
             and its_posible_2pilars_rec(height,rects[1:],rad,cols))
 
 def its_posible_multi_pilar(f_input):
-
+    """"
+    this function checks if it's possible to build a "pont" between 2 pints using 2 cols
+    Args:
+        f_input: the input data extrated from the input file in a tuple containing:
+            the desired height
+            the num of cols/points
+            the alpha value
+            the beta value
+            the coordinates of the cols/points
+    Return:
+        returns a boolean
+    """
     _,height,_,_,rects=f_input
     rads=calc_radius(rects)
     return its_posible_multi_pilar_rec(height,rects,rads,True)
 
 def its_posible_multi_pilar_rec(height,rects,rads,first=False):
+    """"
+    tis function is used by the recursive algorithm in function its_posible_multi_pilar
+    Args:
+        height: the desired height of the pont/aqueducte
+        rects: the point to check
+        rad: the radius of the semicircle between the 2 columns
+        cols: the columns points
+    Return:
+        returns a boolean
+    """
     if len(rects)==1:
         return rects[0][1]>height-rads[0]
-    elif first:
+    if first:
         return rects[0][1]>height-rads[0] and its_posible_multi_pilar_rec(height,rects[1:],rads)
     return (rects[0][1]>height-max(rads[0],rads[1])
             and its_posible_multi_pilar_rec(height,rects[1:],rads[1:]))
