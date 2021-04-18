@@ -57,51 +57,43 @@ def possible_pic(height,rad,cols,pic):
     dist=math.sqrt((mid**2)+(alt**2))
     return not(dist>rad and pic[1]>height-rad)
 
-def its_possible(input):
+def its_posible_2pilars(f_input):
+    """"
+    this function checks if it's possible to build a "pont" between 2 pints using 2 cols
+    Args:
+        f_input: the input data extrated from the input file in a tuple containing:
+            the desired height
+            the num of cols/points
+            the alpha value
+            the beta value
+            the coordinates of the cols/points
+    Return:
+        returns a boolean
     """
-    this function checks if in an input can be build
-    """
-    return its_posible_2pilars_R(input) or its_posible_multi_pilar_R(input)
-
-def calc_multi_pilar(input):
-    """
-    this function cal
-    """
-    _,height,alpha,beta,rects=input
-    height_list=[height-p[1] for p in rects]
-    distance_list=[(rects[i+1][0]-rects[i][0])**2 for i in range(len(rects)-1)]
-    return alpha*sum(height_list)+beta*sum(distance_list)
-
-def calc_2pilar(input):
-    _,height,alpha,beta,rects=input
-    rects=[rects[0],rects[-1]]
-    height_list=[height-p[1] for p in rects]
-    distance_list=[(rects[i+1][0]-rects[i][0])**2 for i in range(len(rects)-1)]
-    return alpha*sum(height_list)+beta*sum(distance_list)
-
-def calc(input):
-    if its_possible(input):
-        prices=[calc_2pilar(input),calc_multi_pilar(input)]
-        if 'impossible' in prices:
-            prices.remove('impossible')
-        if len(prices)==0:
-            return 'impossible'
-        return min(prices)
-    return 'impossible'
-def its_posible_2pilars_R(input):
-    _,height,_,_,rects=input
+    _,height,_,_,rects=f_input
     rads=calc_radius([rects[0],rects[-1]])[0]
     return its_posible_2pilars_rec(height,rects[1:-1],rads,[rects[0],rects[-1]])
 
 def its_posible_2pilars_rec(height,rects,rad,cols):
+    """"
+    tis function is used by the recursive algorithm
+    Args:
+        height: the desired height of the pont/aqueducte
+        rects: the point to check
+        rad: the radius of the semicircle between the 2 columns
+        cols: the columns points
+    Return:
+        returns a boolean
+    """
     if len(rects)==1:
         return not rects[0][1]>=height and  possible_pic(height,rad,cols,rects[0])
     return ((not rects[0][1]>=height
             and possible_pic(height,rad,cols,rects[0]))
             and its_posible_2pilars_rec(height,rects[1:],rad,cols))
 
-def its_posible_multi_pilar_R(input):
-    _,height,_,_,rects=input
+def its_posible_multi_pilar(f_input):
+
+    _,height,_,_,rects=f_input
     rads=calc_radius(rects)
     return its_posible_multi_pilar_rec(height,rects,rads,True)
 
@@ -113,6 +105,80 @@ def its_posible_multi_pilar_rec(height,rects,rads,first=False):
     return (rects[0][1]>height-max(rads[0],rads[1])
             and its_posible_multi_pilar_rec(height,rects[1:],rads[1:]))
 
+def its_possible(f_input):
+    """
+    this function checks if in an input can be build
+    Args:
+        f_input: the input data extrated from the input file in a tuple containing:
+            the desired height
+            the num of cols/points
+            the alpha value
+            the beta value
+            the coordinates of the cols/points
+    Return:
+        returns a boolean
+    """
+    return its_posible_2pilars(f_input) or its_posible_multi_pilar(f_input)
+
+def calc_multi_pilar(f_input):
+    """
+    this function calculates the cost to build a milti pilar aqueducte
+    Args:
+        f_input: the input data extrated from the input file in a tuple containing:
+            the desired height
+            the num of cols/points
+            the alpha value
+            the beta value
+            the coordinates of the cols/points
+    Return:
+        returns the cost
+    """
+    _,height,alpha,beta,rects=f_input
+    height_list=[height-p[1] for p in rects]
+    distance_list=[(rects[i+1][0]-rects[i][0])**2 for i in range(len(rects)-1)]
+    return alpha*sum(height_list)+beta*sum(distance_list)
+
+def calc_2pilar(f_input):
+    """
+    this function calculates the cost to build a pont of only 2 cols
+    Args:
+        f_input: the input data extrated from the input file in a tuple containing:
+            the desired height
+            the num of cols/points
+            the alpha value
+            the beta value
+            the coordinates of the cols/points
+    Return:
+        returns the cost
+    """
+    _,height,alpha,beta,rects=f_input
+    rects=[rects[0],rects[-1]]
+    height_list=[height-p[1] for p in rects]
+    distance_list=[(rects[i+1][0]-rects[i][0])**2 for i in range(len(rects)-1)]
+    return alpha*sum(height_list)+beta*sum(distance_list)
+
+def calc(f_input):
+    """
+    this function calculates the minimum cost
+    Args:
+        f_input: the input data extrated from the input file in a tuple containing:
+            the desired height
+            the num of cols/points
+            the alpha value
+            the beta value
+            the coordinates of the cols/points
+    Return:
+        returns an int
+    """
+    if its_possible(f_input):
+        prices=[calc_2pilar(f_input),calc_multi_pilar(f_input)]
+        if 'impossible' in prices:
+            prices.remove('impossible')
+        if len(prices)==0:
+            return 'impossible'
+        return min(prices)
+    return 'impossible'
+
 if __name__ == '__main__':
     file=sys.stdin
     if len(sys.argv)>1:
@@ -120,4 +186,3 @@ if __name__ == '__main__':
     params=read_file(file)
     file.close()
     print(calc(params))
-

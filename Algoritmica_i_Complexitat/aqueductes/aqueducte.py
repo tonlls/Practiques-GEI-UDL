@@ -60,6 +60,15 @@ def possible_pic(height,rad,cols,pic):
 def its_posible_2pilars(f_input):
     """
     this function checks if it's possible to build a bridge with only 2 cols
+    Args:
+        f_input: the input data extrated from the input file in a tuple containing:
+            the desired height
+            the num of cols/points
+            the alpha value
+            the beta value
+            the coordinates of the cols/points
+    Return:
+        returns a boolean
     """
     height,_,_,rects=f_input[1:]
     rads=calc_radius([rects[0],rects[-1]])[0]
@@ -99,12 +108,30 @@ def its_posible_multi_pilar(f_input):
 def its_possible(f_input):
     """
     this function checks if in an input can be build
+    Args:
+        f_input: the input data extrated from the input file in a tuple containing:
+            the desired height
+            the num of cols/points
+            the alpha value
+            the beta value
+            the coordinates of the cols/points
+    Return:
+        returns a boolean
     """
     return its_posible_2pilars(f_input) or its_posible_multi_pilar(f_input)
 
 def calc_multi_pilar(f_input):
     """
     this function calculates the cost to build a milti pilar aqueducte
+    Args:
+        f_input: the input data extrated from the input file in a tuple containing:
+            the desired height
+            the num of cols/points
+            the alpha value
+            the beta value
+            the coordinates of the cols/points
+    Return:
+        returns the cost
     """
     _,height,alpha,beta,rects=f_input
     height_list=[height-p[1] for p in rects]
@@ -114,6 +141,15 @@ def calc_multi_pilar(f_input):
 def calc_2pilar(f_input):
     """
     this function calculates the cost to build a pont of only 2 cols
+    Args:
+        f_input: the input data extrated from the input file in a tuple containing:
+            the desired height
+            the num of cols/points
+            the alpha value
+            the beta value
+            the coordinates of the cols/points
+    Return:
+        returns the cost
     """
     _,height,alpha,beta,rects=f_input
     rects=[rects[0],rects[-1]]
@@ -124,6 +160,15 @@ def calc_2pilar(f_input):
 def calc(f_input):
     """
     this function calculates the minimum cost
+    Args:
+        f_input: the input data extrated from the input file in a tuple containing:
+            the desired height
+            the num of cols/points
+            the alpha value
+            the beta value
+            the coordinates of the cols/points
+    Return:
+        returns an int
     """
     if its_possible(f_input):
         prices=[calc_2pilar(f_input),calc_multi_pilar(f_input)]
