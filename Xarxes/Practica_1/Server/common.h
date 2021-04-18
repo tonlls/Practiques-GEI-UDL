@@ -38,7 +38,7 @@
 #define ID_LEN 7
 #define MAC_LEN 13
 #define RAND_LEN 7
-#define UDP_DATA_LEN 50
+#define UDP_DATA_LEN 20
 #define TCP_DATA_LEN 50
 #define UDP_PDU_LEN (ID_LEN+MAC_LEN+RAND_LEN+UDP_DATA_LEN+1)
 #define TCP_PDU_LEN (ID_LEN+MAC_LEN+RAND_LEN+TCP_DATA_LEN+1)
@@ -85,7 +85,7 @@ typedef struct t_pdu{
 	char id[ID_LEN];
 	char mac[MAC_LEN];
 	char num[RAND_LEN];
-	char data[DATA_LEN];
+	char data[TCP_DATA_LEN];
 }pdu;
 typedef struct t_client{
 	STATE actual_state;

@@ -71,10 +71,10 @@ void wait_file(int sock,client cli,config cfg,char file[]){/////////////////////
 		}else{
 			tcp_recive(sock,&p);
 			//TODO: add/test timeout
-			if(check_pdu(cli,p);){
+			if(check_pdu(cli,p)){
 				tcp_reject(sock);
 			}
-			choose_act(sock,cli,p,cfg)
+			choose_act(sock,cli,p,cfg);
 			// str2pdu(buff,&p);
 			//TODO: check_pdu()
 			if(p.type==PUT_DATA){
@@ -99,13 +99,13 @@ void send_file(int sock,client cli,config cfg,char file[]){/////////////////////
 	create_pdu(&p,GET_DATA,cfg.id,cfg.mac,atoi(cli.num),"");
 	while (getline(&buff, &len, f)!=-1) {
 		strcpy(p.data,buff);
-		tcp_send(sock,&p);
+		tcp_send(sock,p);
         // printf("Retrieved line of length %zu:\n", read);
         printf("%s", line);
     }
 	p.type=GET_END;
 	strcpy(p.data,"");
-	tcp_send(sock,&p);
+	tcp_send(sock,p);
 }
 //send file to client
 void put_file(int sock,pdu msg,client cli,config cfg){
@@ -142,16 +142,16 @@ void get_file(int sock,pdu recived,client cli,config cfg){
 }
 void reply_alive(int sock,config cfg,client c){
 	pdu p;
-	create_pdu(&p,ALIVE_ACK,conf.id,cfg.mac,c.num,"");
+	create_pdu(&p,ALIVE_ACK,cfg.id,cfg.mac,c.num,"");
 	tcp_send(sock,p);
 }
 void choose_act(int sock,client cli,pdu p,config cfg){
 	switch(p.type){
 		case PUT_FILE:
-			get_file(sock,cli,cfg);
+			get_file(sock,p,cli,cfg);
 			break;
 		case GET_FILE:
-			put_file(sock,cli,cfg);
+			put_file(sock,p,cli,cfg);
 			break;
 		case ALIVE_INF:
 			reply_alive(sock,cfg,cli);
@@ -166,7 +166,7 @@ void tcp_attend_client(int sock,config cfg){////////////////////////////////////
 	while(){
 		tcp_recive(sock,&p);
 		check_client(p);
-		choose_act(p);
+		choose_act(sock,p);
 	}
 	// tcp_close(sock,);
 }

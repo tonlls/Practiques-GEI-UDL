@@ -67,6 +67,8 @@ class PDU:
 		return self.type+self.id+'\0'+self.mac+'\0'+self.num+'\0'+self.data+'\0'
 	@staticmethod
 	def from_conf(conf,type,num,data):
+		if conf.num!='0'*6:
+			return PDU(type,conf.id,conf.mac,conf.num,data)
 		return PDU(type,conf.id,conf.mac,num,data)
 	@staticmethod
 	def parse_str(str):#########################################################
@@ -99,6 +101,8 @@ class TCP:
 		self.server_address = (config.tcp_server, 10000)
 		print('connecting to {} port {}'.format(*server_address))
 		self.sock.connect(server_address)
+	def send_alive(self):
+		PDU.from_conf()
 	def send_file(self,filename):
 		lines=None
 		with f=open(filename,'r'):
@@ -186,8 +190,9 @@ class Comands:
 		conn.send(PDU(PDU.get_type('PUT_FILE'),config.id,config.mac,'00000',s))
 		pass
 	# read config file from the server
-	def get_cfg():
+	def get_cfg(conn):
 		conn.read()
+		# save file
 		pass
 	# 
 	def quit(u,t):
