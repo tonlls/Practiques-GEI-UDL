@@ -1,8 +1,8 @@
-*files
-**aqueducte.py
-**aqueducte_rec.py
-*functions
-**read_file(my_file):
+* files
+** aqueducte.py
+** aqueducte_rec.py
+* functions
+** read_file(my_file):
 
 def calc_radius(rects):
 
