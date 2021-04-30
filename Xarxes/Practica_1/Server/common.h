@@ -3,7 +3,7 @@
 #define common_h__
  
 // extern void foo(void);
- 
+#define  _GNU_SOURCE
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,6 +14,7 @@
 #include <time.h>
 #include <errno.h>
 
+#include <sys/shm.h>
 #include <sys/socket.h> 
 #include <sys/select.h>
 #include <sys/shm.h>
@@ -35,11 +36,13 @@
 
 #define MAX_FILENAME 100
 
+#define IP_LEN 16
+
 #define ID_LEN 7
 #define MAC_LEN 13
 #define RAND_LEN 7
-#define UDP_DATA_LEN 20
-#define TCP_DATA_LEN 50
+#define UDP_DATA_LEN 50
+#define TCP_DATA_LEN 150
 #define UDP_PDU_LEN (ID_LEN+MAC_LEN+RAND_LEN+UDP_DATA_LEN+1)
 #define TCP_PDU_LEN (ID_LEN+MAC_LEN+RAND_LEN+TCP_DATA_LEN+1)
 
@@ -79,7 +82,10 @@ typedef enum t_PDU_TYPE{
 	GET_REJ=0x44,
 	GET_END=0x45
 }PDU_TYPE;
-
+typedef enum t_pdu_type{
+	UDP=0,
+	TCP=1
+}pdu_type;
 typedef struct t_pdu{
 	PDU_TYPE type;
 	char id[ID_LEN];
@@ -90,10 +96,12 @@ typedef struct t_pdu{
 typedef struct t_client{
 	STATE actual_state;
 	char id[ID_LEN];
+	char ip[IP_LEN];
 	char mac[MAC_LEN];
 	char num[RAND_LEN];
-	struct sockaddr_in cliaddr;
+	struct sockaddr_in *cliaddr;
 	int sock;
+	clock_t timer;
 }client;
 typedef struct t_shared_mem{
 	client clis[MAX_CLI];
@@ -105,30 +113,5 @@ typedef struct t_config{
 	int udp_port;
 	int tcp_port;
 }config;
-void error(char[]);
-int debug(const char *, ...);
-int itsip(char []);
-void str2pdu(char [],pdu *);
-void concat(char [],char [],int );
-int pdu2str(pdu ,char []);
-void create_pdu(pdu *,PDU_TYPE,char [ID_LEN],char [MAC_LEN],int,char [DATA_LEN]);
-// void create_pdu(pdu *,PDU_TYPE ,char [ID_LEN],char [MAC_LEN],char [DATA_LEN]);
-int check_pdu(client ,pdu );
-void read_clients(char [],shared_mem *);
-//TODO: repair function to use shared memory
-int check_client(client ,shared_mem );
-void read_config(char [],config *);
-void parse_parameters(int , char *[],char [],char []);
-int get_rand();
-/* COMANDS */
-int check_command(char []);
-void list();
-void quit();
-
-/* CONSOLE */
-void console();
-
-/* shared memory */
-void init_shared_mem(int *,shared_mem *);
 
 #endif  // foo_h__

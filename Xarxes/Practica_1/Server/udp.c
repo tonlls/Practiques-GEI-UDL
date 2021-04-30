@@ -27,17 +27,13 @@ void udp_create_server(int *sockfd,struct sockaddr_in *servaddr, struct sockaddr
 int udp_send(int sock,struct sockaddr_in *cli,pdu msg){
 	int len = sizeof(*cli);  //len is value/resuslt
 	char buff[UDP_PDU_LEN+1];
-	int size=pdu2str(msg,buff);
-	// printf("(%d) -> %s",size,buff);
+	pdu2str(msg,buff);
 	if(sendto(sock,(const char *)buff,UDP_PDU_LEN+1,0,(const struct sockaddr *)cli,len)<0){
 		debug("error on sending UDP message");
-		//TODO return error from enum if needed
 		return -1;
 	}
+	return 0;
 	debug("udp message sent");
-	// printf("\nerror: %d\n",x);
-	// printf("Oh dear, %s\n", strerror(errno));
-
 }
 
 int udp_recive(int sock,struct sockaddr_in *cli,pdu *msg){
@@ -51,37 +47,44 @@ int udp_recive(int sock,struct sockaddr_in *cli,pdu *msg){
 		return -1;
 	}
 	debug("udp message recived");
-	str2pdu(buff,msg);
+	str2pdu(buff,msg,UDP);
 	return 0;
 }
 void udp_close(int sock){
 	close(sock);
 	debug("UDP server cloosed");
 }
-void udp_refuse(int sock,struct sockaddr_in *cli){
+void udp_refuse(int sock,struct sockaddr_in *cli,pdu pd){
 	pdu p;
 	create_pdu(&p,REGISTER_REJ,"000000","000000000000",0,"client dosen't have permisions");
     udp_send(sock,cli,p);
     exit(0);//TODO: add fork wait
 }
-void udp_accept(int sock,struct sockaddr_in *cli,config cfg,shared_mem *sh_mem,int n_cl){
+
+void udp_accept(config cfg,shared_mem *sh_mem,int n_cl){
 	pdu p;
-    int n=get_rand();
-	char data[DATA_LEN];
+	char data[UDP_DATA_LEN];
+	client cli=sh_mem->clis[n_cl];
     // strcpy(sh_mem->clis[n_cl].id,c.id);
     // strcpy(sh_mem->clis[n_cl].mac,c.mac);
-    sprintf(sh_mem->clis[n_cl].num,"%06d",n);
-    sh_mem->clis[n_cl].cliaddr=*cli;
-    sh_mem->clis[n_cl].actual_state=REGISTERED;//TODO: tocheck
+    // sprintf(cli.num,"%06d",n);
+
+    // sh_mem->clis[n_cl].cliaddr=*cli;
+    // sh_mem->clis[n_cl].actual_state=REGISTERED;//TODO: tocheck
     // memcpy((void *)&sh_mem->clis[cl].cliaddr, (void *)cli, sizeof() );
 	sprintf(data,"%d",cfg.tcp_port);
-	create_pdu(&p,REGISTER_ACK,cfg.id,cfg.mac,n,data);
-    udp_send(sock,cli,p);
+	create_pdu(&p,REGISTER_ACK,cfg.id,cfg.mac,atoi(cli.num),data);
+	// printf("sending brhu");
+    udp_send(cli.sock,cli.cliaddr,p);
+	sh_mem->clis[n_cl].actual_state=WAIT_REG;
+	reset_timer(sh_mem,n_cl);
+	debug("client registered");
 }
-void udp_accept_conected(int sock,config cfg,shared_mem *sh_mem,int n_cli){
+void udp_accept_conected(config cfg,shared_mem *sh_mem,int n_cli){
 	pdu p;
-	create_pdu(&p,REGISTER_ACK,cfg.id,cfg.mac,atoi(sh_mem->clis[n_cli].num),sh_mem->clis[n_cli].num);
-    udp_send(sock,&sh_mem->clis[n_cli].cliaddr,p);
+	client cli=sh_mem->clis[n_cli];
+	create_pdu(&p,REGISTER_ACK,cfg.id,cfg.mac,atoi(cli.num),cli.num);
+    udp_send(cli.sock,cli.cliaddr,p);
 }
 void udp_naccept(int sock,struct sockaddr_in *cli){
 	pdu p;
@@ -89,42 +92,124 @@ void udp_naccept(int sock,struct sockaddr_in *cli){
     udp_send(sock,cli,p);
     //exit(0);//TODO: add fork wait
 }
-void set_client(client *c,pdu p){
-    strcpy(c->id,p.id);
-    strcpy(c->mac,p.mac);
+
+void reply_alive(config cfg,shared_mem *shm,int c){
+	pdu p;
+	client cl=shm->clis[c];
+	create_pdu(&p,ALIVE_ACK,cfg.id,cfg.mac,atoi(cl.num),"");
+	udp_send(cl.sock,cl.cliaddr,p);
 }
-void udp_attend_client(int sock,struct sockaddr_in *cli,client c,shared_mem *sh_mem,config cfg){
-	int e=check_client(c,*sh_mem);
-	if(e==-1)//error el client no te permis
-		udp_refuse(sock,cli);
-	else if(sh_mem->clis[e].actual_state==ALIVE||sh_mem->clis[e].actual_state==REGISTERED)//client alredy connected but neeed random number
+void reject_alive(shared_mem *shm,int c){
+	pdu p;
+	client cl=shm->clis[c];
+	create_pdu(&p,ALIVE_REJ,"000000","000000000000",0,"client dosen't have permisions");
+	udp_send(cl.sock,cl.cliaddr,p);
+}
+void udp_timeout(int sockfd){
+	struct timeval tv;
+	tv.tv_sec = 4;
+	tv.tv_usec = 0;
+	setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+}
+// void reply_reject(int sock)
+/*void udp_wait_alives(int sock,client c,struct sockaddr_in *cli,shared_mem *sh_mem,config cfg){
+	pdu p;
+	while (1){
+		udp_recive(sock,cli,&p);
+		if(p.type==ALIVE_INF){
+			debug("alive recived id: %s",p.id);
+			reply_alive(cfg,sh_mem);
+		}else{
+			// reply_reject(sock,cfg,cli)
+			// tcp_reject;
+		}
+	}
+	
+}*/
+/*void udp_attend_client(int sock,struct sockaddr_in *cli,client c,shared_mem *sh_mem,config cfg,int e){
+	if(sh_mem->clis[e].actual_state==WAIT_REG||sh_mem->clis[e].actual_state==REGISTERED)//client alredy connected but neeed random number
         udp_accept_conected(sock,cfg,sh_mem,e);
 	else if(sh_mem->clis[e].actual_state!=DISCONNECTED)//client alredy connected
 		udp_naccept(sock,cli);
 	else{//cli ok
+		// sh_mem->clis[e].actual_state==DISCONNECTED
+		debug("sent acceptaTION");
 		udp_accept(sock,cli,cfg,sh_mem,e);
 	}
-
+	udp_wait_alives(sock,c,cli,sh_mem,cfg);
+}*/
+void disconnect_cli(shared_mem *shm,int i){
+	debug("client disconnected for timeout id: %s",shm->clis[i].id);
+	shm->clis[i].actual_state=DISCONNECTED;
+}
+void time_controller(shared_mem *shm){
+	clock_t t;
+	client c;
+	while(1){
+		for(int i=0;i<shm->n_clis;i++){
+			c=shm->clis[i];
+			if(c.actual_state!=DISCONNECTED){
+				// printf("%s\n",c.id);
+				t=time(NULL);
+				if(c.timer<t-4)
+					disconnect_cli(shm,i);
+			}
+		}
+		
+	}
+}
+void udp_attend_client(config cfg,pdu p,shared_mem *shm,int c){
+	client cl=shm->clis[c];
+	STATE s=cl.actual_state;
+	if(p.type==REGISTER_REQ){
+		if(s==DISCONNECTED){
+			reset_timer(shm,c);
+			shm->clis[c].actual_state=REGISTERED;
+			udp_accept(cfg,shm,c);
+		}else if(s==REGISTERED||s==ALIVE)
+			udp_accept_conected(cfg,shm,c);
+	}else if(p.type==ALIVE_INF){
+		if(s==DISCONNECTED){
+			reject_alive(shm,c);
+			exit(0);
+		}
+		if(s==REGISTERED)
+			shm->clis[c].actual_state=ALIVE;
+		reply_alive(cfg,shm,c);
+		reset_timer(shm,c);
+	}
 }
 void udp_server(config cfg,shared_mem *sh_mem){//function for runing on udp proces
 	int sockfd;
 	pdu pdu;
 	struct sockaddr_in servaddr, cliaddr; 
-    client c;
+    // client c;
+	int cli;
+	// signal(SIGINT, handle_sigint);
 	udp_create_server(&sockfd,&servaddr,&cliaddr,cfg);////////////////////////////////////////
-	// while(1){
+	// time_contr
+	while(1){
 		udp_recive(sockfd,&cliaddr,&pdu);
-        set_client(&c,pdu);
-		//TODO:check another time pls
-		int pid=fork();
-		if(pid==0)
-	        udp_attend_client(sockfd,&cliaddr,c,sh_mem,cfg);
-		else
-			memset(&cliaddr, 0, sizeof(cliaddr)); 
-	//}
-	// printf("%s\n",pdu.data);
+		
+		cli=check_client(*sh_mem,pdu.mac,pdu.id);
+		// printf("%d %d %d\n",cli,strcmp(pdu.id,(*sh_mem).clis[2].id),strcmp(pdu.mac,(*sh_mem).clis[2].mac));
+		// printf("%s %s\n",(*sh_mem).clis[2].id,(*sh_mem).clis[2].mac);
+		if(cli==-1){
+			udp_refuse(sockfd,&cliaddr,pdu);
+		}else{
+			debug("client can be accepted");
+        	if(sh_mem->clis[cli].actual_state==DISCONNECTED)
+				set_client(sh_mem,cli,sockfd,get_rand(),&cliaddr);
+			//TODO:check another time pls
+			// int pid=fork();
+	        udp_attend_client(cfg,pdu,sh_mem,cli);
+			// exit(0);
+			// }
+		}
+		memset(&cliaddr, 0, sizeof(cliaddr)); 
+	}
 	// create_pdu(&pdu,REGISTER_REQ,"000001","111111111111","hola puta");
-	udp_send(sockfd,&cliaddr,pdu);
+	// udp_send(sockfd,&cliaddr,pdu);
 	udp_close(sockfd);
 	exit(0);
 }

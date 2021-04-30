@@ -20,7 +20,7 @@ void tcp_create_server(int *sockfd,struct sockaddr_in *servaddr,struct sockaddr_
 		debug("TCP socket successfully binded"); 
   
 	// Now server is ready to listen and verification 
-	if ((listen(sockfd, TCP_MAX_CONN)) != 0) { 
+	if ((listen(*sockfd, TCP_MAX_CONN)) != 0) { 
 		printf("Listen failed...\n"); 
 		exit(0); 
 	} 
@@ -28,19 +28,24 @@ void tcp_create_server(int *sockfd,struct sockaddr_in *servaddr,struct sockaddr_
 		printf("Server listening..\n"); 
    
 }
-void tcp_send(int sock,pdu msg){
+void tcp_send(int sock,pdu msg,struct sockaddr_in *cli){
 	char buff[TCP_PDU_LEN+1];
+	int len=sizeof(*cli);
 	pdu2str(msg,buff);
-	write(sock, buff, sizeof(buff)); 
+	// write(sock, buff, TCP_PDU_LEN+1); 
+	sendto(sock, buff, TCP_PDU_LEN, 0, (struct sockaddr *)cli,len);
 	debug("TCP message sent");
 }
-void tcp_recive(int sock,pdu *msg){
+void tcp_recive(int sock,pdu *msg,struct sockaddr_in *cli){
 	char buff[TCP_PDU_LEN+1];
-	int n=read(sock, buff, sizeof(buff));
+	int len=sizeof(*cli);
+	// int n=read(sock, buff, sizeof(buff));
+	int n = recvfrom(sock,(char *)buff,TCP_PDU_LEN,MSG_WAITALL,(struct sockaddr *)cli,(unsigned int * restrict)&len); 
+	buff[n]='\0';
 	debug("TCP message recived");
-	str2pdu(buff,msg);
+	str2pdu(buff,msg,TCP);
 }
-void tcp_close(int *socketfd){
+void tcp_close(int socketfd){
 	close(socketfd);
 	exit(0);
 }
@@ -50,37 +55,41 @@ void tcp_close(int *socketfd){
 void tcp_error(){
 
 }
+void tcp_reject(){
+
+}
 /* ACTIONS */
-void wait_file(int sock,client cli,config cfg,char file[]){/////////////////////////////////////////////////////////////////////////
-	char buff[TCP_PDU_LEN];
+void wait_file(int sock,client cli,config cfg,char file[],struct sockaddr_in *cl){/////////////////////////////////////////////////////////////////////////
+	// char buff[TCP_PDU_LEN];
 	pdu p;
-	int ret,rfds;
-	struct timeval tv;
+	// int ret,i=0;
+	// fd_set rfds;
+	// struct timeval tv;
 	//TODO: track file creation error
 	FILE *f=fopen(file,"w");
-	tv.tv_sec = W; 
-	tv.tv_usec = 0;
-	FD_ZERO(&rfds);
-    FD_SET(sock, &rfds);
+	// tv.tv_sec = W; 
+	// tv.tv_usec = 0;
+	// FD_ZERO(&rfds);
+	// FD_SET(sock, &rfds);
 	do{
 		//TODO:add timing
-		ret=select(sock+1, &rfds, NULL, NULL, &tv);
+		// ret=select(sock+1, &rfds, NULL, NULL, &tv);
 		debug("waiting for client to send file");
-		if(ret==-1){
-		//TODO: check errors
-		}else{
-			tcp_recive(sock,&p);
+		// if(ret==-1){
+		// TODO: check errors
+		// printf("tens un putu error joder\n");
+		// }else{
+			tcp_recive(sock,&p,cl);
+			// printf("paquete bro %d\n",i++);
 			//TODO: add/test timeout
 			if(check_pdu(cli,p)){
 				tcp_reject(sock);
 			}
-			choose_act(sock,cli,p,cfg);
-			// str2pdu(buff,&p);
 			//TODO: check_pdu()
 			if(p.type==PUT_DATA){
-				fprintf(f,"%s\n",p.data);
+				fprintf(f,"%s",p.data);
 			}
-		}
+		// }
 	}while(p.type==PUT_DATA);
 	if(p.type!=PUT_END){
 		//TODO: ERRRRRRRRRRRRRROOOOOOOOOOOOOOOOOOR
@@ -88,104 +97,107 @@ void wait_file(int sock,client cli,config cfg,char file[]){/////////////////////
 	fclose(f);
 	// fclose(sock);
 }
-void send_file(int sock,client cli,config cfg,char file[]){///////////////////////////////////////////////////////////////////////////////////////////////
+void send_file(int sock,client cli,config cfg,char file[],struct sockaddr_in *c){///////////////////////////////////////////////////////////////////////////////////////////////
 	pdu p;
-	char buff[200];//TODO:ADD LINE LEN
+	// int i=0;
+	char *buff;//TODO:ADD LINE LEN
+	// char *buff[200];//TODO:ADD LINE LEN
+	// char st[TCP_PDU_LEN];//TODO:ADD LINE LEN
 	size_t len=0;
 	FILE *f=fopen(file,"r");
-	if(f<0){
+	if(f<(FILE*)0){
 		//error
+		printf("error\n");
 	}
+	// printf("%s\n",file);
 	create_pdu(&p,GET_DATA,cfg.id,cfg.mac,atoi(cli.num),"");
 	while (getline(&buff, &len, f)!=-1) {
 		strcpy(p.data,buff);
-		tcp_send(sock,p);
-        // printf("Retrieved line of length %zu:\n", read);
-        printf("%s", line);
-    }
+		tcp_send(sock,p,c);
+	}
 	p.type=GET_END;
+	free(buff);
 	strcpy(p.data,"");
-	tcp_send(sock,p);
+	tcp_send(sock,p,c);
+	// fclose(tt);
+	fclose(f);
 }
 //send file to client
-void put_file(int sock,pdu msg,client cli,config cfg){
+void put_file(int sock,pdu msg,client cli,config cfg,struct sockaddr_in *c){
 	pdu p;
 	int e;
 	char buff[TCP_PDU_LEN];
-	FILE *f;
-	if(check_pdu(cli,msg)){
+	// FILE *f;
+	create_pdu(&p,GET_ACK,cfg.id,cfg.mac,atoi(cli.num),buff);
+	e=check_pdu(cli,msg);
+	// printf("%d\n",e);
+	if(e){
+		// printf("vaig a enviar file\n");
 		sprintf(buff,"%s.cfg",cli.id);
-		create_pdu(&p,GET_ACK,cfg.id,cfg.mac,atoi(cli.num),buff);
-		tcp_send(sock,p);
-		send_file(sock,cli,cfg,buff);
+		tcp_send(sock,p,c);
+		send_file(sock,cli,cfg,buff,c);
+		// printf("----------------vaig a enviar file\n");
 	}
 	//TODO: tancar canal tcp;
 }
 //get file from client
-void get_file(int sock,pdu recived,client cli,config cfg){
+void get_file(int sock,pdu recived,client cli,config cfg,struct sockaddr_in *c){
 	pdu p;
-	int e;
-	char buff[DATA_LEN];
+	// int e;
+	char buff[TCP_DATA_LEN];
 	//check client
+	create_pdu(&p,PUT_ACK,cfg.id,cfg.mac,atoi(cli.num),buff);
 	if(check_pdu(cli,recived)){
 		sprintf(buff,"%s.cfg",cli.id);
-		create_pdu(&p,PUT_ACK,cfg.id,cfg.mac,atoi(cli.num),buff);
-		tcp_send(sock,p);
-		wait_file(sock,cli,cfg,buff);
+		tcp_send(sock,p,c);
+		wait_file(sock,cli,cfg,buff,c);
 	}else{
 		//TODO: add reject if data isn't correct
 		create_pdu(&p,PUT_REJ,cfg.id,cfg.mac,atoi(cli.num),"");
-		tcp_send(sock,p);
+		tcp_send(sock,p,c);
 	}
 	//close client()
 	//TODO: tancar canal tcp;
 }
-void reply_alive(int sock,config cfg,client c){
-	pdu p;
-	create_pdu(&p,ALIVE_ACK,cfg.id,cfg.mac,c.num,"");
-	tcp_send(sock,p);
-}
-void choose_act(int sock,client cli,pdu p,config cfg){
+void choose_act(int sock,client cli,pdu p,config cfg,struct sockaddr_in *cl){
 	switch(p.type){
 		case PUT_FILE:
-			get_file(sock,p,cli,cfg);
+			get_file(sock,p,cli,cfg,cl);
 			break;
 		case GET_FILE:
-			put_file(sock,p,cli,cfg);
+			put_file(sock,p,cli,cfg,cl);
 			break;
-		case ALIVE_INF:
-			reply_alive(sock,cfg,cli);
-			break;
-		case default:
+		default:
 			break;
 	}
 }
-void tcp_attend_client(int sock,config cfg){////////////////////////////////////////////////////////////////////////
+void tcp_attend_client(int sock,config cfg,shared_mem *shm,struct sockaddr_in *cli){////////////////////////////////////////////////////////////////////////
 	pdu p;
 	//read()
-	while(){
-		tcp_recive(sock,&p);
-		check_client(p);
-		choose_act(sock,p);
-	}
-	// tcp_close(sock,);
+	// while(){
+	// printf("hola he fet tcp");
+	tcp_recive(sock,&p,cli);
+	int cl=check_client(*shm,p.mac,p.id);
+	choose_act(sock,shm->clis[cl],p,cfg,cli);
+	tcp_close(sock);
+	// }
 }
-void tcp_server(config cfg){
+void tcp_server(config cfg,shared_mem *shm){
 	int sockfd,len,pid,client;
-	pdu pdu;
+	// pdu pdu;
 	struct sockaddr_in servaddr, cliaddr;
 	tcp_create_server(&sockfd,&servaddr,&cliaddr,cfg);
 	len = sizeof(cliaddr);
 	//TODO get signal to end proces
 	while(1){
-		client = accept(sockfd, (struct sockaddr_in*)&cliaddr, &len); 
+		client = accept(sockfd, (struct sockaddr*)&cliaddr, (socklen_t *restrict)&len); 
 		if (client < 0) { 
 			debug("server acccept failed...\n"); 
 		}
 		else{
 			pid=fork();
 			if(pid!=0)
-				tcp_attend_client(client,cfg);
+				tcp_attend_client(client,cfg,shm,&cliaddr);
 		}
 			printf("server acccept the client...\n"); 
   
