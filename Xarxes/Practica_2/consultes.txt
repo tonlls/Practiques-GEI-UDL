@@ -1,19 +1,25 @@
-1- el domini de broadcast que ha d'estar destinat a els dispositius de mesura ha d'estar totalment aillat? es a dir no s'ha de conectar enlloc de la xarxa interna?
+x 1- el domini de broadcast que ha d'estar destinat a els dispositius de mesura ha d'estar totalment aillat? es a dir no s'ha de conectar enlloc de la xarxa interna?
 
-2- hem de treballar en els previstos o inicials?
+x 2- hem de treballar en els previstos o inicials?
 
-3- a l'hora de implementar vlans de molts equips es optim dividir-ho en 2 vlans?
+x 3- a l'hora de implementar vlans de molts equips es optim dividir-ho en 2 vlans?
 
-4- l'encaminament nivell 3 entre departaments es a nivell de planta o a nivell central?
+x 4- l'encaminament nivell 3 entre departaments es a nivell de planta o a nivell central?
 
 5- Mi no entender:
-	L’empresa vol tenir separades les tasques d’encaminament intern i extern.  Les tasques d’encamina-ment extern les ha de realitzar l’equip de nivell3situat en la planta baixa i les tasques d’encaminamentintern han de dur-se a terme en l’equip de la segona planta.  L’equipament encarregat de l’encamina-ment intern i extern també ha de donar servei a usuaris (tasques de nivell2)
+	L’empresa vol tenir separades les tasques d’encaminament intern i extern.  Les tasques d’encamina-ment extern les ha de realitzar l’equip de nivell3 situat en la planta baixa i les tasques d’encaminamentintern han de dur-se a terme en l’equip de la segona planta.  L’equipament encarregat de l’encamina-ment intern i extern també ha de donar servei a usuaris (tasques de nivell2)
 
-6- com podem conectar mes de 48 pcs en un sol switch si te nomes 48 pots, podem fer servir mes d'un switch?
+x 6- com podem conectar mes de 48 pcs en un sol switch si te nomes 48 pots, podem fer servir mes d'un switch?
 
 7- Mi no entender:
 	Per proporcionar cobertura sense fil s’instal·larà un sistema de punts d’accés lleugers gestionats peruna controladora. El sistema ha de permetre la connectivitat a Internet als clients en les zones de vendai l’aparcament i als empleats a la xarxa corporativa en totes les dependències.
 
-8- l'equip encarregat de la gestió de xaarxa ha d'anar en alguna vlans?
+x 8- l'equip encarregat de la gestió de xaarxa ha d'anar en alguna vlans?
 
-9- els dispositius de mesura es conecten a internet?
+x 9- els dispositius de mesura es conecten a internet?
+
+x 10- les controladores wifi quants ports necessiten?
+
+x 11- el sistema de climatització quants ports necessita?
+
+x 12- que es la mascara \32

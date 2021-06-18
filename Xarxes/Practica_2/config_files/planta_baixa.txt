@@ -1,0 +1,106 @@
+! Stack Manager :
+! Chassis :
+system daylight savings time disable 
+! Configuration: 
+! VLAN : 
+vlan 2 enable name "vendes"
+vlan 2 port default 2/1
+vlan 2 port default 2/2
+vlan 2 port default 2/3
+vlan 2 port default 2/4
+vlan 2 port default 2/5
+vlan 2 port default 2/6
+vlan 2 port default 2/7
+vlan 2 port default 2/8
+vlan 2 port default 2/9
+vlan 2 port default 2/10
+vlan 2 port default 2/11
+vlan 3 enable name "servei_tecnic"
+vlan 3 port default 2/12
+vlan 4 enable name "post_venta"
+vlan 4 port default 2/13
+vlan 4 port default 2/14
+vlan 4 port default 2/15
+vlan 4 port default 2/16
+vlan 5 enable name "magatzem"
+vlan 6 enable name "atencio_client"
+vlan 6 port default 3/1
+vlan 6 port default 3/2
+vlan 6 port default 3/3
+vlan 6 port default 3/4
+vlan 6 port default 3/5
+vlan 7 enable name "adimistracio"
+vlan 8 enable name "climatitzacio" 
+vlan 8 port default 3/6 
+vlan 8 port default 3/7 
+vlan 8 port default 3/8 
+vlan 9 enable name "wifi"
+vlan 9 port default 3/9 
+vlan 9 port default 3/10 
+vlan 9 port default 3/11 
+vlan 10 enable name "seguretat"
+vlan 10 port default 3/12
+vlan 10 port default 3/13
+vlan 10 port default 3/14
+! VLAN SL: 
+! IP : 
+ip service all 
+ip interface "vendes" address 38.17.28.127 mask 255.255.255.128 vlan 2 ifindex 1 
+ip interface "servei_tecnic" address 38.17.28.159 mask 255.255.255.224 vlan 3 ifindex 2
+ip interface "post_venta" address 38.17.28.190 mask 255.255.255.224 vlan 4 ifindex 3
+ip interface "magatzem" address 38.17.28.223 mask 255.255.255.224 vlan 5 ifindex 4
+ip interface "atencio_client" address 38.17.29.63 mask 255.255.255.192 vlan 6 ifindex 5
+ip interface "administracio" address 38.17.28.239 mask 255.255.255.240 vlan 7 ifindex 6
+! IPMS : 
+! AAA :
+! PARTM :
+! 802.1x : 
+! QOS :
+! Policy manager : 
+! Session manager :
+! SNMP : 
+! RIP :
+! IPv6 : 
+! IP multicast : 
+! IPRM : 
+ip static-route 38.17.28.0 mask 255.255.255.128 gateway 38.17.28.127 metric 1
+ip static-route 38.17.28.0 mask 255.255.255.224 gateway 38.17.28.159 metric 1
+ip static-route 38.17.28.0 mask 255.255.255.224 gateway 38.17.28.191 metric 1
+ip static-route 38.17.28.0 mask 255.255.255.224 gateway 38.17.28.223 metric 1
+ip static-route 38.17.28.0 mask 255.255.255.240 gateway 38.17.28.223 metric 1
+ip static-route 38.17.29.0 mask 255.255.255.192 gateway 38.17.29.63 metric 1
+! RIPng :
+! Health monitor : 
+health threshold temperature 78
+! Interface :
+! Udld : 
+! Port Mapping : 
+! Link Aggregate : 
+! VLAN AGG:
+! 802.1Q : 
+! Spanning tree :
+bridge mode 1x1
+! Bridging : 
+! Bridging : 
+! Port mirroring : 
+! UDP Relay :
+! System service : 
+swlog console level info 
+! SSH :
+! VRRP : 
+! Web :
+! AMAP : 
+! LanPower : 
+! NTP :
+! RDP :
+! VLAN STACKING: 
+! EFM-OAM :
+! SAA :
+! Loopback-detection : 
+! ERP :
+! TEST-OAM : 
+! DHL :
+! LLDP : 
+! DHCP Server :
+! Stack Split-Protection Helper :
+! Openflow :
