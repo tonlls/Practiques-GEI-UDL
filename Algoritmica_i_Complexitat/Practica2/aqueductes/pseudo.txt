@@ -1,0 +1,74 @@
+
+
+DEFINE FUNCTION dynamic(bridge,i=0,memo={}):
+	res=[]
+	IF i>=len(bridge.pillars)-1:
+		RETURN 0
+	start=bridge.pillars[i]
+	FOR p IN range(i+1,bridge.len):
+		IF bridge.its_possible(i,p):
+		IF not (str(i)+'-'+str(p) IN memo):
+			memo[str(i)+'-'+str(p)]=
+				bridge.get_partial_cost(start,bridge.pillars[p],i!=0)
+				+dynamic(bridge,p,memo)
+		res.append(memo[str(i)+'-'+str(p)])
+	IF i==0 and len(res)==0:
+		raise Exception("Impossible")
+	ELSEIF len(res)==0:
+		RETURN -1
+	RETURN min(res)
+
+
+
+
+
+DEFINE FUNCTION backtracking(bridge,i=0):
+	res=[]
+	IF i>=len(bridge.pillars)-1:
+		RETURN 0
+	start=bridge.pillars[i]
+	FOR p IN range(i+1,len(bridge.pillars)):
+		IF bridge.its_possible(i,p):
+		c=backtracking(bridge,p)
+		IF c!=-1:
+			res.append(bridge.get_partial_cost(start,bridge.pillars[p],i!=0)+c)
+	IF i==0 and len(res)==0:
+		raise Exception("Impossible")
+	ELSEIF len(res)==0:
+		RETURN -1
+	RETURN min(res)
+
+
+
+
+
+DEFINE FUNCTION greedy(bridge,i=0):
+	cost={}
+	IF i==len(bridge.pillars)-1:
+		RETURN 0
+	FOR b IN bridge.pillars[i+1:]:
+		IF bridge.its_possible(i,b.id):
+		cost[b.id]=bridge.get_partial_cost(bridge.pillars[i],b,i!=0)
+	IF len(cost)==0:
+		raise Exception("Impossible")
+	k=min(cost,key=cost.get)
+	RETURN cost[k]+greedy(bridge,k)
+
+
+
+
+
+DEFINE FUNCTION greedy_it(bridge):
+	res=0
+	i=0
+	WHILE i!=len(bridge.pillars)-1:
+		cost={}
+		FOR b IN bridge.pillars[i+1:]:
+		IF bridge.its_possible(i,b.id):
+			cost[b.id]=bridge.get_partial_cost(bridge.pillars[i],b)
+		IF len(cost)==0:
+		raise Exception("Impossible")
+		k=min(cost,key=cost.get)
+		res+=cost[k]
+		i=k
+	RETURN res
