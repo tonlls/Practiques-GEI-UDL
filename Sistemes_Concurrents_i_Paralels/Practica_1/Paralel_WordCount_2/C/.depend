@@ -1,0 +1,8 @@
+-g 
+-lpthread 
+-MM 
+Map.cpp 
+MapReduce.cpp 
+Reduce.cpp 
+Types.cpp 
+WordCount.cpp 

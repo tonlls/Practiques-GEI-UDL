@@ -1,0 +1,6 @@
+make.exe --dry-run --always-make --keep-going --print-directory
+"make.exe": Entering directory `/d/GitHub/Practiques-GEI-UDL/Sistemes_Concurrents_i_Paralels/Practica_1/Paralel_WordCount 2/C'
+"make.exe": Leaving directory `/d/GitHub/Practiques-GEI-UDL/Sistemes_Concurrents_i_Paralels/Practica_1/Paralel_WordCount 2/C'
+ 
+.depend:1: *** missing separator.  Stop.
+ 

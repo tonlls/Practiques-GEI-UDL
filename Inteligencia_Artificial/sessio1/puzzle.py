@@ -1,5 +1,5 @@
 import random,copy
-from enum import Enum
+from enum import Enum, unique
 class Grid:
 	def __init__(self, values):
 		self.grid=values
@@ -32,12 +32,7 @@ class Grid:
 		with the desired value
 		"""
 		index=self.grid.index(value)
-		if index is not None:
-			x=index%3
-			y=int(index/3)
-			return x,y
-		return None
-		# raise NotImplementedError
+		return index%3,int(index/3) if index is not None else None
 
 	def iterate_by_rows(self):
 		"""
@@ -52,13 +47,14 @@ class Grid:
 	def deep_copy(self):
 		return Grid([i for i in self.grid])
 
+# @unique
 class Actions(Enum):
-	def __str__(self):
-		return self.name
-	LEFT=1
-	UP=2
-	DOWN=3
-	RIGHT=4
+	# def __str__(self):
+		# return self.name
+	LEFT=(-1,0)
+	UP=(0,-1)
+	DOWN=(0,1)
+	RIGHT=(1,0)
 
 class Environment:
 	"""
@@ -71,42 +67,26 @@ class Environment:
 		self.state = Grid(grid)
 		# self.state = Grid([1,2,3,4,5,8,6,7,self.EMPTY])
 
+	def _valid_action(self,action):
+		ix,iy=self.state.find_value(self.EMPTY)
+		ix+=action.value[0]
+		iy+=action.value[1]
+		return ix>=0 and ix<3 and iy>=0 and iy<3
 	def get_available_actions(self):
 		"""Return the available actions depending on the current state"""
-		# return Actions
-		actions=[a for a in Actions]
-		ix,iy=self.state.find_value(self.EMPTY)
-		if ix==0:
-			actions.remove(Actions.LEFT)
-		if ix==2:
-			actions.remove(Actions.RIGHT)
-		if iy==0:
-			actions.remove(Actions.UP)
-		if iy==2:
-			actions.remove(Actions.DOWN)
-		return actions
+		return [a for a in Actions if self._valid_action(a)]
 
 	def get_state(self):
 		"""Return the current state of the problem"""
-		# TODO: ensure that we return an inmutable object or a copy
-		#  of the state to avoid future problems.
-		# return copy.deepcopy(self.state)
 		return self.state.deep_copy()
-
-	def step(self, action):
+	def step(self,action):
 		"""
 		Apply a time step. This is apply an action
 		and update the state accordingly
 		"""
 		ox,oy=self.state.find_value(self.EMPTY)
-		if action == Actions.UP:
-			nx,ny=ox,oy-1
-		elif action == Actions.DOWN:
-			nx,ny=ox,oy+1
-		elif action == Actions.LEFT:
-			nx,ny=ox-1,oy
-		elif action == Actions.RIGHT:
-			nx,ny=ox+1,oy
+		nx=ox+action.value[0]
+		ny=oy+action.value[1]
 		old=self.state.get_value(nx,ny)
 		self.state.set_value(ox,oy,old)
 		self.state.set_value(nx,ny,self.EMPTY)
@@ -131,7 +111,9 @@ def get_action_from_stdin(available_actions):
 	Asks for user input to enter a number that represents the action to take
 	in the next step.
 	"""
-	actions = {a.value: a for a in available_actions}
+	actions = [ a for a in available_actions]
+	# actions = {a:available_actions[a] for a in range(len(available_actions))}
+	# actions = {0:Actions.LEFT,1:Actions.UP,2:Actions.DOWN,3:Actions.RIGHT}
 	while True:
 		try:
 			action = int(input("Enter action: "))
@@ -153,7 +135,8 @@ def main():
 		# Agent behaviour:
 		state = env.get_state()
 		actions = env.get_available_actions()
-		print(actions)
+		actions_out = {a:actions[a].name for a in range(len(actions))}
+		print(actions_out)
 
 		action = get_action_from_stdin(actions)
 		print(action)
