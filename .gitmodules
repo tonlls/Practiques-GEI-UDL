@@ -1,0 +1,6 @@
+[submodule "Sistemes_Concurrents_i_Paralels\\Practica_1\\Paralel_WordCount"]
+	path = Sistemes_Concurrents_i_Paralels\\Practica_1\\Paralel_WordCount
+	url = https://github.com/IanRibaltaGene/Paralel_WordCount
+[submodule "Inteligencia_Artificial/Practica_IA"]
+	path = Inteligencia_Artificial/Practica_IA
+	url = https://github.com/tonlls/Practica_IA
