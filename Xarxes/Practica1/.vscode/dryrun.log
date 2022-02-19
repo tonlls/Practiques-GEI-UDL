@@ -1,0 +1,11 @@
+make.exe --dry-run --always-make --keep-going --print-directory
+make.exe: Entering directory `/d/GitHub/Practiques-GEI-UDL/Xarxes/Practica1'
+gcc -ansi -pedantic -Wall -std=c17 -c 
+mv *.o server/
+gcc -ansi -pedantic -Wall -std=c17 server/server.o -o server/server
+gcc -ansi -pedantic -Wall -std=c17 -c client/client.c
+mv *.o client/
+gcc -ansi -pedantic -Wall -std=c17 client/client.o -o client/client
+rm -f server/*.o client/*.o
+make.exe: Leaving directory `/d/GitHub/Practiques-GEI-UDL/Xarxes/Practica1'
+ 

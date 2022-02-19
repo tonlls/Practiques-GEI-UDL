@@ -1,0 +1,6 @@
+make.exe --dry-run --keep-going --print-directory
+make.exe: Entering directory `/d/GitHub/Practiques-GEI-UDL/Xarxes/v1/Practica_1'
+make.exe: Leaving directory `/d/GitHub/Practiques-GEI-UDL/Xarxes/v1/Practica_1'
+ 
+make.exe: *** No targets specified and no makefile found.  Stop.
+ 
